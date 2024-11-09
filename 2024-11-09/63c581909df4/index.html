@@ -19,23 +19,21 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="A*寻路A*寻路有如下特点： 基于网格 A*寻路算法是基于格子的寻路算法，即算法会把地图看作多个格子组成，寻得的路径也是一连串相邻格子组成的路径。 启发式 对于一个网格，假设操作目标能四向移动，如何让程序知道往哪个格子走能更接近终点？如果能在每次移动前做一次评估，根据评估获得的值进行比较，取评估值最合适的格子进行移动，理论上就能达到这一目的。 这一思路被称为启发式，指通过评估找到合适的路径，即优先">
+    <meta name="description" content="图论中的拓扑排序简单介绍拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。 抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边u -&gt; v，在拉长后的链条中，都有节点u位于节点v之前。 拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目">
 <meta property="og:type" content="article">
-<meta property="og:title" content="A*寻路算法">
-<meta property="og:url" content="http://example.com/2024-10-10/142c5063b9b6/index.html">
+<meta property="og:title" content="图论-拓扑排序">
+<meta property="og:url" content="http://example.com/2024-11-09/63c581909df4/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="A*寻路A*寻路有如下特点： 基于网格 A*寻路算法是基于格子的寻路算法，即算法会把地图看作多个格子组成，寻得的路径也是一连串相邻格子组成的路径。 启发式 对于一个网格，假设操作目标能四向移动，如何让程序知道往哪个格子走能更接近终点？如果能在每次移动前做一次评估，根据评估获得的值进行比较，取评估值最合适的格子进行移动，理论上就能达到这一目的。 这一思路被称为启发式，指通过评估找到合适的路径，即优先">
+<meta property="og:description" content="图论中的拓扑排序简单介绍拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。 抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边u -&gt; v，在拉长后的链条中，都有节点u位于节点v之前。 拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/static/MaHpbKVMlokmwYxKGLScfSiynGb.png">
-<meta property="article:published_time" content="2024-10-10T08:48:03.000Z">
-<meta property="article:modified_time" content="2024-10-10T08:52:04.000Z">
+<meta property="article:published_time" content="2024-11-09T11:48:15.000Z">
+<meta property="article:modified_time" content="2024-11-09T13:05:02.000Z">
 <meta property="article:author" content="OrangeFruitTea">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/static/MaHpbKVMlokmwYxKGLScfSiynGb.png">
   
   
   
-  <title>A*寻路算法 - 果茶小站</title>
+  <title>图论-拓扑排序 - 果茶小站</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="A*寻路算法"></span>
+            <span id="subtitle" data-typed-text="图论-拓扑排序"></span>
           
         </div>
 
@@ -212,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-10-10 16:48" pubdate>
-          2024年10月10日 下午
+        <time datetime="2024-11-09 19:48" pubdate>
+          2024年11月9日 晚上
         </time>
       </span>
     
@@ -224,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k 字
+          320 字
         
       </span>
     
@@ -235,7 +233,7 @@
         
         
         
-          13 分钟
+          3 分钟
         
       </span>
     
@@ -272,81 +270,30 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">A*寻路算法</h1>
+            <h1 id="seo-header">图论-拓扑排序</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="A-寻路"><a href="#A-寻路" class="headerlink" title="A*寻路"></a>A*寻路</h1><p>A*寻路有如下特点：</p>
-<p><strong>基于网格</strong></p>
-<p>A*寻路算法是基于格子的寻路算法，即算法会把地图看作多个格子组成，寻得的路径也是一连串相邻格子组成的路径。</p>
-<p><strong>启发式</strong></p>
-<p>对于一个网格，假设操作目标能四向移动，如何让程序知道往哪个格子走能更接近终点？如果能在每次移动前做一次评估，根据评估获得的值进行比较，取评估值最合适的格子进行移动，理论上就能达到这一目的。</p>
-<p>这一思路被称为启发式，指通过评估找到合适的路径，即优先搜索最有可能产生最佳路径的格子。</p>
-<h2 id="A-寻路的组成"><a href="#A-寻路的组成" class="headerlink" title="A*寻路的组成"></a>A*寻路的组成</h2><h3 id="估价-评估函数"><a href="#估价-评估函数" class="headerlink" title="估价&#x2F;评估函数"></a>估价&#x2F;评估函数</h3><p>先前提到算法需要对移动的方向进行评估获取估价值，因此需要编写一个估价函数进行计算。</p>
-<p>对于任意一个格子 n，其估价计算函数为：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">f</span>(n) = <span class="hljs-built_in">g</span>(n) + <span class="hljs-built_in">h</span>(n)<br></code></pre></td></tr></table></figure>
-
-<p>g(n)指从起点到格子 n 的实际代价，h(n)是从格子 n 到终点的估计代价。</p>
-<p><img src="/static/MaHpbKVMlokmwYxKGLScfSiynGb.png" srcset="/img/loading.gif" lazyload></p>
-<p>对于上述图片例子的三个格子，计算 f(n)值的流程是：</p>
+                <h1 id="图论中的拓扑排序"><a href="#图论中的拓扑排序" class="headerlink" title="图论中的拓扑排序"></a>图论中的拓扑排序</h1><h2 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h2><p>拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。</p>
+<p>抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边<code>u -&gt; v</code>，在拉长后的链条中，都有节点<code>u</code>位于节点<code>v</code>之前。</p>
+<p>拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目中的不同任务的次序安排：</p>
+<p>一个项目中包含四个子任务A、B、C和D，且A依赖于B与D，C依赖于D，现在需要计算出A、B、C、D的执行顺序。</p>
+<h2 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h2><p>拓扑排序的基本流程如下：</p>
 <ul>
-<li><p>格子 1：</p>
-<ul>
-<li>起点至格子 1 需移动 1 格，g(1) &#x3D; 1；</li>
-<li>格子 1 到终点的直线距离为 6 格，h(1) &#x3D; 6；</li>
-<li>f(1) &#x3D; 1 + 6 &#x3D; 7。</li>
-</ul>
-</li>
-<li><p>同理得格子 2 的估价：f(2) &#x3D; g(2) + h(2) &#x3D; 1 + 4 &#x3D; 5</p>
-</li>
-<li><p>格子 3 的估价：f(3) &#x3D; g(3) + h(3) &#x3D; √2 + √17</p>
-</li>
-</ul>
-<p>因此优先考虑去往格子 2 的情况。</p>
-<p>上述对 h(n)的计算采用了简单的直线距离计算（即使用欧几里得距离），h(n)的值永远 &lt;&#x3D;格子 n 到终点的最短实际距离。但这样计算时会出现大量的平方与开根号的计算，并且需要采用浮点数，性能差。因此根据实际情况往往使用的是曼哈顿距离或对角线 + 直线的距离。</p>
-<p>曼哈顿距离简单来说是只允许水平垂直移动的最短距离，因此曼哈顿距离肯定 &gt;&#x3D;格子 n 到终点的最短实际距离。</p>
-<p>另一种加快运算的方式是，假设两个格子之间的单位距离 L，然后直接认为对角线距离为 1.4L，从而避免浮点数和根号运算。</p>
-<h4 id="h-n-的影响"><a href="#h-n-的影响" class="headerlink" title="h(n)的影响"></a>h(n)的影响</h4><p>总地来说：</p>
-<ul>
-<li>如果 h(n) &lt;&#x3D; n 到终点的实际距离，A*算法可以找到最短路径，但搜索的点数多，搜索范围大，效率低；</li>
-<li>如果 h(n) &gt; n 到终点的实际距离，搜索的点数少，搜索范围小，效率高，但是得到的路径并不一定是最短的。</li>
-<li>h(n) 越接近 n 到终点的实际距离，那么 A*算法越完美。（个人理解是如果用曼哈顿距离，那么只需要找到一条长度小于等于该距离的路径就算完成任务了。而使用对角线距离就要找到一条长度大于等于对角线距离且最短的路径才行。）</li>
-<li>若 h(n)&#x3D;0，即 f(n)&#x3D;g(n)，A*算法就变为了 Dijkstra 算法（Dijstra 算法会毫无方向的向四周搜索）。</li>
-<li>若 h(n) 远远大于 g(n) ，那么 f(n) 的值就主要取决于 h(n)，A*算法就演变成了广度优先遍历算法。</li>
-</ul>
-<p>因此在启发式寻路算法中，估价函数十分重要，尤其是其中的 h(n)部分。</p>
-<h3 id="A-寻路流程"><a href="#A-寻路流程" class="headerlink" title="A*寻路流程"></a>A*寻路流程</h3><h4 id="简述版"><a href="#简述版" class="headerlink" title="简述版"></a>简述版</h4><ul>
-<li><p>预备两个列表 openList 与 closeList 储存对应的地图格；</p>
-</li>
-<li><p>将起点格加入开启列表 openList 中；</p>
-</li>
-<li><p>重复以下流程：</p>
-<ul>
-<li>遍历 openList，寻找 openList 中 f(n)最小的结点，将其设置为当前处理结点；</li>
-<li>将当前处理结点移动至 closeList；</li>
-<li>对当前处理结点的每个相邻结点：<ul>
-<li>若其不可达或已在 closeList 中，将其忽略；</li>
-<li>若其不在 openList 中，将其加入 openList，把当前处理结点设置为其父结点，并记录当前处理结点的 F、G 和 H 值；</li>
-<li>若其已在 openList 中，检查当前处理结点到其的路径是否更好：依据计算出的 G 值进行参考，更小的 G 值表示更好的路径；若如此，将其父节点设置为当前处理结点，并重新计算其 G 值与 F 值，并可能需要对 openList 重新排序；</li>
+<li>构造一个队列Q和拓扑排序的结果队列T；</li>
+<li>将所有没有依赖顶点的节点放入Q；</li>
+<li>当Q中仍有节点时：<ul>
+<li>从Q中取出一个顶点n并将其放入T；</li>
+<li>对n的每一个邻接点m：<ul>
+<li>去掉有向边<code>&lt;n, m&gt;</code>；</li>
+<li>如果没有以m为终点的边，将m放入Q中；</li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p>停止，当：</p>
-<ul>
-<li>终点被加入到 openList 中，此时找到了路径；</li>
-<li>查找终点失败，并且 openList 为空，此时没有路径；</li>
+<li>重复上述步骤，直到队列Q为空。</li>
 </ul>
-</li>
-<li><p>保存路径，从终点开始，每个结点沿着其父结点移动至起点。</p>
-</li>
-</ul>
-<h4 id="深入了解"><a href="#深入了解" class="headerlink" title="深入了解"></a>深入了解</h4><p>由于 A*寻路算法的核心为其估价函数，因此需要一个结构&#x2F;类储存如下信息：对象对应的网格 ID、该网格的 F、G、H 值及其父结点。以下是伪代码：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Node</span>(<span class="hljs-type">int</span> id, Node* parent, <span class="hljs-type">int</span> g, <span class="hljs-type">int</span> h)<br>        : <span class="hljs-built_in">Id</span>(id), <span class="hljs-built_in">Parent</span>(parent), <span class="hljs-built_in">g</span>(g), <span class="hljs-built_in">h</span>(h) &#123;<br>            f = <span class="hljs-built_in">calF</span>(g, h); <span class="hljs-comment">//构造函数内部的估价函数</span><br>    &#125;<br>    <span class="hljs-type">int</span> Id;<br>    Node* Parent;<br>    <br>    <span class="hljs-comment">//</span><br>    <span class="hljs-type">int</span> g;    <span class="hljs-comment">// 父节点到该网格的实际距离</span><br>    <span class="hljs-type">int</span> h;    <span class="hljs-comment">// 该网格至终点的估计距离 / 估计值</span><br>    <span class="hljs-type">int</span> f;    <span class="hljs-comment">// 该网格的总估价值</span><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">calF</span><span class="hljs-params">(<span class="hljs-type">int</span> g, <span class="hljs-type">int</span> h)</span> </span>&#123;<br>        <span class="hljs-comment">// 实现估价函数计算</span><br>        <span class="hljs-keyword">return</span> g + h;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>然后需要两个数据结构 openList 与 closeList 储存格子，前者储存将要被计算估值的格子，后者储存已经被计算估值的格子。</p>
-<h2 id="改进-A-寻路"><a href="#改进-A-寻路" class="headerlink" title="改进 A*寻路"></a>改进 A*寻路</h2><h3 id="改进估价函数"><a href="#改进估价函数" class="headerlink" title="改进估价函数"></a>改进估价函数</h3><h4 id="选择预估函数"><a href="#选择预估函数" class="headerlink" title="选择预估函数"></a>选择预估函数</h4><h4 id="为函数增加权重"><a href="#为函数增加权重" class="headerlink" title="为函数增加权重"></a>为函数增加权重</h4><h4 id="结点比较时的优化"><a href="#结点比较时的优化" class="headerlink" title="结点比较时的优化"></a>结点比较时的优化</h4><h3 id="优化搜索邻域"><a href="#优化搜索邻域" class="headerlink" title="优化搜索邻域"></a>优化搜索邻域</h3><h3 id="使用双向搜索"><a href="#使用双向搜索" class="headerlink" title="使用双向搜索"></a>使用双向搜索</h3><h3 id="优化数据结构"><a href="#优化数据结构" class="headerlink" title="优化数据结构"></a>优化数据结构</h3><p>显然在算法逻辑中需要对 openList 与 closeList 进行频繁的增删和查询；</p>
 
                 
               </div>
@@ -385,8 +332,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>A*寻路算法</div>
-      <div>http://example.com/2024-10-10/142c5063b9b6/</div>
+      <div>图论-拓扑排序</div>
+      <div>http://example.com/2024-11-09/63c581909df4/</div>
     </div>
     <div class="license-meta">
       
@@ -398,7 +345,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年10月10日</div>
+          <div>2024年11月9日</div>
         </div>
       
       
@@ -430,18 +377,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024-11-09/63c581909df4/" title="图论-拓扑排序">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">图论-拓扑排序</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024-10-10/b27fcb36e098/" title="右值引用浅析">
-                        <span class="hidden-mobile">右值引用浅析</span>
+                      <a href="/2024-10-10/142c5063b9b6/" title="A*寻路算法">
+                        <span class="hidden-mobile">A*寻路算法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

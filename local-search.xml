@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>图论-拓扑排序</title>
+    <link href="/2024-11-09/63c581909df4/"/>
+    <url>/2024-11-09/63c581909df4/</url>
+    
+    <content type="html"><![CDATA[<h1 id="图论中的拓扑排序"><a href="#图论中的拓扑排序" class="headerlink" title="图论中的拓扑排序"></a>图论中的拓扑排序</h1><h2 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h2><p>拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。</p><p>抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边<code>u -&gt; v</code>，在拉长后的链条中，都有节点<code>u</code>位于节点<code>v</code>之前。</p><p>拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目中的不同任务的次序安排：</p><p>一个项目中包含四个子任务A、B、C和D，且A依赖于B与D，C依赖于D，现在需要计算出A、B、C、D的执行顺序。</p><h2 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h2><p>拓扑排序的基本流程如下：</p><ul><li>构造一个队列Q和拓扑排序的结果队列T；</li><li>将所有没有依赖顶点的节点放入Q；</li><li>当Q中仍有节点时：<ul><li>从Q中取出一个顶点n并将其放入T；</li><li>对n的每一个邻接点m：<ul><li>去掉有向边<code>&lt;n, m&gt;</code>；</li><li>如果没有以m为终点的边，将m放入Q中；</li></ul></li></ul></li><li>重复上述步骤，直到队列Q为空。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>算法</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>A*寻路算法</title>
     <link href="/2024-10-10/142c5063b9b6/"/>
     <url>/2024-10-10/142c5063b9b6/</url>

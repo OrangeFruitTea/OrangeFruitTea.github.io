@@ -19,21 +19,21 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="图论中的拓扑排序简单介绍拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。 抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边u -&gt; v，在拉长后的链条中，都有节点u位于节点v之前。 拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目">
+    <meta name="description" content="仿Minecraft程序化地形生成Demo - 一点历程前段时间浏览编程大牛博客闲逛博客园时，偶然发现一位大佬使用Unreal引擎模拟MC地形生成流程。由于本人对MC有浓厚兴趣，也掌握一定UE引擎编程技能，同时希望通过该项目提高自己的UEC++项目经验，于是选用该系统作为项目主题构建Demo。 在收集资料以及参考他人项目源码时发现类似的Demo不在少数，然而自主实现的过程中依然碰上各类意想不到的困">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图论-拓扑排序">
-<meta property="og:url" content="http://example.com/2024-11-09/63c581909df4/index.html">
+<meta property="og:title" content="仿Minecraft程序化地形生成Demo制作心路">
+<meta property="og:url" content="http://example.com/2024-11-09/0e00a7cdf859/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="图论中的拓扑排序简单介绍拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。 抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边u -&gt; v，在拉长后的链条中，都有节点u位于节点v之前。 拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目">
+<meta property="og:description" content="仿Minecraft程序化地形生成Demo - 一点历程前段时间浏览编程大牛博客闲逛博客园时，偶然发现一位大佬使用Unreal引擎模拟MC地形生成流程。由于本人对MC有浓厚兴趣，也掌握一定UE引擎编程技能，同时希望通过该项目提高自己的UEC++项目经验，于是选用该系统作为项目主题构建Demo。 在收集资料以及参考他人项目源码时发现类似的Demo不在少数，然而自主实现的过程中依然碰上各类意想不到的困">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-11-09T11:48:15.000Z">
-<meta property="article:modified_time" content="2024-11-09T13:05:02.000Z">
+<meta property="article:modified_time" content="2024-11-10T06:56:20.000Z">
 <meta property="article:author" content="OrangeFruitTea">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>图论-拓扑排序 - 果茶小站</title>
+  <title>仿Minecraft程序化地形生成Demo制作心路 - 果茶小站</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="图论-拓扑排序"></span>
+            <span id="subtitle" data-typed-text="仿Minecraft程序化地形生成Demo制作心路"></span>
           
         </div>
 
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          320 字
+          1.2k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          3 分钟
+          10 分钟
         
       </span>
     
@@ -270,30 +270,34 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">图论-拓扑排序</h1>
+            <h1 id="seo-header">仿Minecraft程序化地形生成Demo制作心路</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="图论中的拓扑排序"><a href="#图论中的拓扑排序" class="headerlink" title="图论中的拓扑排序"></a>图论中的拓扑排序</h1><h2 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h2><p>拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。</p>
-<p>抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边<code>u -&gt; v</code>，在拉长后的链条中，都有节点<code>u</code>位于节点<code>v</code>之前。</p>
-<p>拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目中的不同任务的次序安排：</p>
-<p>一个项目中包含四个子任务A、B、C和D，且A依赖于B与D，C依赖于D，现在需要计算出A、B、C、D的执行顺序。</p>
-<h2 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h2><p>拓扑排序的基本流程如下：</p>
+                <h1 id="仿Minecraft程序化地形生成Demo-一点历程"><a href="#仿Minecraft程序化地形生成Demo-一点历程" class="headerlink" title="仿Minecraft程序化地形生成Demo - 一点历程"></a>仿Minecraft程序化地形生成Demo - 一点历程</h1><p>前段时间浏览编程大牛博客闲逛博客园时，偶然发现一位大佬使用Unreal引擎模拟MC地形生成流程。由于本人对MC有浓厚兴趣，也掌握一定UE引擎编程技能，同时希望通过该项目提高自己的UEC++项目经验，于是选用该系统作为项目主题构建Demo。</p>
+<p>在收集资料以及参考他人项目源码时发现类似的Demo不在少数，然而自主实现的过程中依然碰上各类意想不到的困难阻碍，深感自身编程能力不足知识缺乏，遂写下心路历程浅记经验，同时罗列出参考的项目与教程为读者提供几分思路。</p>
+<h2 id="从零开始了解地形生成"><a href="#从零开始了解地形生成" class="headerlink" title="从零开始了解地形生成"></a>从零开始了解地形生成</h2><p>对于Minecraft这样的沙盒游戏，其地形生成是游戏的核心功能，它要求在世界中创建大量的基本方块形成生动的地形。Minecraft的地形生成并非一次性全部加载与储存所有方块数据：</p>
 <ul>
-<li>构造一个队列Q和拓扑排序的结果队列T；</li>
-<li>将所有没有依赖顶点的节点放入Q；</li>
-<li>当Q中仍有节点时：<ul>
-<li>从Q中取出一个顶点n并将其放入T；</li>
-<li>对n的每一个邻接点m：<ul>
-<li>去掉有向边<code>&lt;n, m&gt;</code>；</li>
-<li>如果没有以m为终点的边，将m放入Q中；</li>
+<li>从内存空间角度看， 储存整个世界的所有方块数据会占用大量的磁盘空间，而使用程序化生成只需要存储生成算法和少量的种子数据；</li>
+<li>从加载时间看，玩家探索新区域时，程序化生成能即时生成地形，一次性生成则需要重新更新整个世界，方块放置与破坏也同样要储存整个数据集，严重延长加载时间。</li>
 </ul>
-</li>
+<p>显然，游戏或和程序本身无法在每次创建世界时就直接包含整个世界的所有数据，而是只保存了“如何生成一个世界”的代码工具，即我们需要设计的地形生成算法。</p>
+<p>为了保证玩家的游戏体验，一个合格的地形算法还需要让地形足够美观自然，让玩家体验到连贯、无缝的自然环境，而不是突兀不自然的地形变化。</p>
+<p>这些地形生成的硬性需求告诉我们，一个程序化地形生成算法要有如下基本要求：</p>
+<ul>
+<li>可复现&#x2F;伪随机：在输入同一个种子时，算法计算出的地形（包括地形高度、生物群系和结构等）不随时间与硬件设备变动，保持不变。</li>
+<li>连续性&#x2F;无断层：在分块加载和计算世界地形时，不同分块之间的地形在视觉上没有断层起伏，且分块的加载顺序对地形变化没有影响。</li>
 </ul>
-</li>
-<li>重复上述步骤，直到队列Q为空。</li>
+<p>以Minecraft为例，一个完整的世界生成可以拆分为如下部分：</p>
+<ul>
+<li>生物群系生成：通过不同的温湿度与其他数据确定不同位置属于哪种生物群系。MC当中，生物群系对地形的初始高度和地表结构都有影响，因此会最先生成。</li>
+<li>高度生成：将生物群系、山地特征性等预先生成的参考值导入高度生成算法，决定世界的哪些部分属于陆地、哪些属于海洋、地形的起伏程度之类。这部分会将整个世界的基石构筑出来，包括山峦、峡谷、河道、海床、洞穴空腔和悬空地形等。</li>
+<li>表面重载：对地形的表面进行覆写，根据生物群系和高度等信息决定地形表面应当是什么样子——草甸、雪山、沙漠、海洋以及地底的矿物生成等属于该步骤。</li>
+<li>结构添加：为世界添加额外的新结构（树林、草丛、房屋结构、地牢等）。该步骤还会在高度生成前确定结构在区块内的范围。</li>
 </ul>
+<h2 id="实现过程摘抄"><a href="#实现过程摘抄" class="headerlink" title="实现过程摘抄"></a>实现过程摘抄</h2><p>在地形生成时使用了开源库<code>FastNoiseLite</code>作为噪声的生成辅助。<br>在UE内部选用地形展示时，一开始使用每个方块作为一个放置在世界中的实体Actor，但在简单生成时发现这样极其影响运行时间，于是选用每个区块生成一个Actor，同时使用动态生成网格体ProceduralMeshComponent来程序化生成区块面，减少渲染占用。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a target="_blank" rel="noopener" href="https://www.cnblogs.com/KillerAery/p/11509470.html">Minecraft类游戏地形生成机制 - KillerAery</a><br>[2] <a target="_blank" rel="noopener" href="https://www.bilibili.com/BV13u411j7KX">[熟肉]Minecraft的地形是如何生成的？</a><br>[3] <a target="_blank" rel="noopener" href="https://minecraft.fandom.com/zh/wiki/%E5%8C%BA%E5%9D%97">区块 - Minecraft Wiki</a><br>[4] <a target="_blank" rel="noopener" href="https://minecraft.fandom.com/zh/wiki/%E7%94%9F%E7%89%A9%E7%BE%A4%E7%B3%BB#%E7%94%9F%E6%88%90">生物群系 - Minecraft Wiki</a><br>[5] <a target="_blank" rel="noopener" href="https://zh.minecraft.wiki/w/%E4%B8%96%E7%95%8C%E7%94%9F%E6%88%90">世界生成 - Minecraft Wiki</a><br>[6] <a target="_blank" rel="noopener" href="https://zh.minecraft.wiki/w/%E5%9C%B0%E7%89%A9">地物 - Minecraft Wiki</a><br>[7] <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv14958026/">创建自己的世界——Minecraft 1.18的地形生成</a></p>
 
                 
               </div>
@@ -312,7 +316,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
   
   
 
@@ -332,8 +336,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>图论-拓扑排序</div>
-      <div>http://example.com/2024-11-09/63c581909df4/</div>
+      <div>仿Minecraft程序化地形生成Demo制作心路</div>
+      <div>http://example.com/2024-11-09/0e00a7cdf859/</div>
     </div>
     <div class="license-meta">
       
@@ -377,12 +381,18 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2024-11-09/63c581909df4/" title="图论-拓扑排序">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">图论-拓扑排序</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024-11-09/0e00a7cdf859/" title="仿Minecraft程序化地形生成Demo制作心路">
-                        <span class="hidden-mobile">仿Minecraft程序化地形生成Demo制作心路</span>
+                      <a href="/2024-10-10/142c5063b9b6/" title="A*寻路算法">
+                        <span class="hidden-mobile">A*寻路算法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

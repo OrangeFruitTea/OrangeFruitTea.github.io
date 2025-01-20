@@ -4,6 +4,27 @@
   
   
   <entry>
+    <title>post</title>
+    <link href="/2025-01-20/5277aaa9497e/"/>
+    <url>/2025-01-20/5277aaa9497e/</url>
+    
+    <content type="html"><![CDATA[<h1 id="C-的内存管理"><a href="#C-的内存管理" class="headerlink" title="C++的内存管理"></a>C++的内存管理</h1><h2 id="程序的内存布局"><a href="#程序的内存布局" class="headerlink" title="程序的内存布局"></a>程序的内存布局</h2><p>C++程序的内存根据其进程结构高低，按照低位到高位分别是：</p><ul><li>代码区：存放可执行程序的机器码。</li><li>数据区：存放初始化的全局、静态变量和常量数据。</li><li>BSS（Block started by symbol）：存放未初始化的全局和静态变量。</li><li>堆：存放动态分配的内存。从低地址到高地址增长，容量大于栈。</li><li>栈：存放局部变量、函数、返回值等数据。从高地址向低地址增长，由编译器自动管理分配。</li></ul><h2 id="堆与栈的区别"><a href="#堆与栈的区别" class="headerlink" title="堆与栈的区别"></a>堆与栈的区别</h2><p>栈一般由硬件实现，CPU通过栈保存调用函数（子程序）时返回的地址，高级语言也使用栈作为局部变量的存储空间。<br>堆作为软件概念，使用与否完全由程序员显式地决定。<br>内存中，堆与栈共用全部的自由空间，但各自的起始地址与增长方向不同。如果内存过低，可能导致堆栈增长至相互覆盖，产生堆栈冲突。<br>二者的主要区别还有：</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>编程语言</category>
+      
+      <category>C++</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>图论-拓扑排序</title>
     <link href="/2024-11-09/63c581909df4/"/>
     <url>/2024-11-09/63c581909df4/</url>

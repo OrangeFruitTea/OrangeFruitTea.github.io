@@ -19,21 +19,21 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="图论中的拓扑排序简单介绍拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。 抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边u -&gt; v，在拉长后的链条中，都有节点u位于节点v之前。 拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目">
+    <meta name="description" content="C++的内存管理程序的内存布局C++程序的内存根据其进程结构高低，按照低位到高位分别是：  代码区：存放可执行程序的机器码。 数据区：存放初始化的全局、静态变量和常量数据。 BSS（Block started by symbol）：存放未初始化的全局和静态变量。 堆：存放动态分配的内存。从低地址到高地址增长，容量大于栈。 栈：存放局部变量、函数、返回值等数据。从高地址向低地址增长，由编译器自动管理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图论-拓扑排序">
-<meta property="og:url" content="http://example.com/2024-11-09/63c581909df4/index.html">
+<meta property="og:title" content="post">
+<meta property="og:url" content="http://example.com/2025-01-20/5277aaa9497e/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="图论中的拓扑排序简单介绍拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。 抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边u -&gt; v，在拉长后的链条中，都有节点u位于节点v之前。 拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目">
+<meta property="og:description" content="C++的内存管理程序的内存布局C++程序的内存根据其进程结构高低，按照低位到高位分别是：  代码区：存放可执行程序的机器码。 数据区：存放初始化的全局、静态变量和常量数据。 BSS（Block started by symbol）：存放未初始化的全局和静态变量。 堆：存放动态分配的内存。从低地址到高地址增长，容量大于栈。 栈：存放局部变量、函数、返回值等数据。从高地址向低地址增长，由编译器自动管理">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-11-09T11:48:15.000Z">
-<meta property="article:modified_time" content="2024-11-09T13:05:02.000Z">
+<meta property="article:published_time" content="2025-01-20T13:19:56.000Z">
+<meta property="article:modified_time" content="2025-01-20T13:29:12.000Z">
 <meta property="article:author" content="OrangeFruitTea">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>图论-拓扑排序 - 果茶小站</title>
+  <title>post - 果茶小站</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="图论-拓扑排序"></span>
+            <span id="subtitle" data-typed-text="post"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-11-09 19:48" pubdate>
-          2024年11月9日 晚上
+        <time datetime="2025-01-20 21:19" pubdate>
+          2025年1月20日 晚上
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          320 字
+          286 字
         
       </span>
     
@@ -270,30 +270,20 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">图论-拓扑排序</h1>
+            <h1 id="seo-header">post</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="图论中的拓扑排序"><a href="#图论中的拓扑排序" class="headerlink" title="图论中的拓扑排序"></a>图论中的拓扑排序</h1><h2 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h2><p>拓扑排序是指将一个有向无环图(Directed Acyclic Graph, 简称DAG)进行排序，获得一个有序的线性序列的排序算法。</p>
-<p>抽象来说，它将一个DAG拉长为一条包含所有节点的链条，并且不破坏DAG节点原本的先后顺序，即对于图中的每一条有向边<code>u -&gt; v</code>，在拉长后的链条中，都有节点<code>u</code>位于节点<code>v</code>之前。</p>
-<p>拓扑排序可以用来确认节点发生的顺序，一个常用的简单例子是项目中的不同任务的次序安排：</p>
-<p>一个项目中包含四个子任务A、B、C和D，且A依赖于B与D，C依赖于D，现在需要计算出A、B、C、D的执行顺序。</p>
-<h2 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h2><p>拓扑排序的基本流程如下：</p>
+                <h1 id="C-的内存管理"><a href="#C-的内存管理" class="headerlink" title="C++的内存管理"></a>C++的内存管理</h1><h2 id="程序的内存布局"><a href="#程序的内存布局" class="headerlink" title="程序的内存布局"></a>程序的内存布局</h2><p>C++程序的内存根据其进程结构高低，按照低位到高位分别是：</p>
 <ul>
-<li>构造一个队列Q和拓扑排序的结果队列T；</li>
-<li>将所有没有依赖顶点的节点放入Q；</li>
-<li>当Q中仍有节点时：<ul>
-<li>从Q中取出一个顶点n并将其放入T；</li>
-<li>对n的每一个邻接点m：<ul>
-<li>去掉有向边<code>&lt;n, m&gt;</code>；</li>
-<li>如果没有以m为终点的边，将m放入Q中；</li>
+<li>代码区：存放可执行程序的机器码。</li>
+<li>数据区：存放初始化的全局、静态变量和常量数据。</li>
+<li>BSS（Block started by symbol）：存放未初始化的全局和静态变量。</li>
+<li>堆：存放动态分配的内存。从低地址到高地址增长，容量大于栈。</li>
+<li>栈：存放局部变量、函数、返回值等数据。从高地址向低地址增长，由编译器自动管理分配。</li>
 </ul>
-</li>
-</ul>
-</li>
-<li>重复上述步骤，直到队列Q为空。</li>
-</ul>
+<h2 id="堆与栈的区别"><a href="#堆与栈的区别" class="headerlink" title="堆与栈的区别"></a>堆与栈的区别</h2><p>栈一般由硬件实现，CPU通过栈保存调用函数（子程序）时返回的地址，高级语言也使用栈作为局部变量的存储空间。<br>堆作为软件概念，使用与否完全由程序员显式地决定。<br>内存中，堆与栈共用全部的自由空间，但各自的起始地址与增长方向不同。如果内存过低，可能导致堆栈增长至相互覆盖，产生堆栈冲突。<br>二者的主要区别还有：</p>
 
                 
               </div>
@@ -312,8 +302,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="category-chain-item">编程语言</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C/" class="category-chain-item">C++</a>
+  
+  
+
   
 
       </span>
@@ -332,8 +329,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>图论-拓扑排序</div>
-      <div>http://example.com/2024-11-09/63c581909df4/</div>
+      <div>post</div>
+      <div>http://example.com/2025-01-20/5277aaa9497e/</div>
     </div>
     <div class="license-meta">
       
@@ -345,7 +342,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年11月9日</div>
+          <div>2025年1月20日</div>
         </div>
       
       
@@ -377,18 +374,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025-01-20/5277aaa9497e/" title="post">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">post</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024-11-09/0e00a7cdf859/" title="仿Minecraft程序化地形生成Demo制作心路">
-                        <span class="hidden-mobile">仿Minecraft程序化地形生成Demo制作心路</span>
+                      <a href="/2024-11-09/63c581909df4/" title="图论-拓扑排序">
+                        <span class="hidden-mobile">图论-拓扑排序</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

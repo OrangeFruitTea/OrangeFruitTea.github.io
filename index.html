@@ -392,15 +392,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/4c5eb32834bb/" target="_self">
+        <a href="/2025-08-11/a9efbe6b6860/" target="_self">
           
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/4c5eb32834bb/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/a9efbe6b6860/" target="_self">
         <div>
-          程序计数器、虚拟机栈和本地方法栈三个区域都随线程生灭，栈中的栈帧的出入栈操作也同样简单，因此当方法或线程结束后，对应的内存自然跟着回收，不需要过多考虑如何内存管理。但动态分配的堆与方法区则并非如此：一个接口的多个实现类的内存可能不一样，一个方法执行的不同分支所需内存也可能不一样，只有处于运行期间，程序才能了解自己要创建什么类型的对象，创建多少个对象，因此这部分的内存分配与回收时动态的，需要一个垃圾
+          Java的方法调用Java的class文件的编译过程里不包括传统编译过程的链接阶段。class文件中的方法以符号引用的形式存储，而非方法的入口地址。该特定使得Java具有强大的动态拓展能力，但同时增加了Java方法调用过程的复杂性。Java方法需要在类加载期间或者运行期间才能确定真正的入口地址，即把符号引用转为直接引用。即因为多态的存在，程序在判断方法调用的版本时需要进行一定的选择。JVM中提供5
         </div>
       </a>
 
@@ -458,15 +458,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/a9efbe6b6860/" target="_self">
+        <a href="/2025-08-11/4c5eb32834bb/" target="_self">
           
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/a9efbe6b6860/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/4c5eb32834bb/" target="_self">
         <div>
-          Java的方法调用Java的class文件的编译过程里不包括传统编译过程的链接阶段。class文件中的方法以符号引用的形式存储，而非方法的入口地址。该特定使得Java具有强大的动态拓展能力，但同时增加了Java方法调用过程的复杂性。Java方法需要在类加载期间或者运行期间才能确定真正的入口地址，即把符号引用转为直接引用。即因为多态的存在，程序在判断方法调用的版本时需要进行一定的选择。JVM中提供5
+          程序计数器、虚拟机栈和本地方法栈三个区域都随线程生灭，栈中的栈帧的出入栈操作也同样简单，因此当方法或线程结束后，对应的内存自然跟着回收，不需要过多考虑如何内存管理。但动态分配的堆与方法区则并非如此：一个接口的多个实现类的内存可能不一样，一个方法执行的不同分支所需内存也可能不一样，只有处于运行期间，程序才能了解自己要创建什么类型的对象，创建多少个对象，因此这部分的内存分配与回收时动态的，需要一个垃圾
         </div>
       </a>
 

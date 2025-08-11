@@ -1,0 +1,662 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon.png">
+  <link rel="icon" href="/img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="OrangeFruitTea">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本项目照抄自[MYDB](一起写个数据库 —— 0. 项目结构和一些不得不说的话 - MYDB - 项目 - 计算机 | ziyang balabala~ &#x3D; 菜狗の日常).整体分为后端和前端，之间通过socket进行交互。前端即客户端职责单一，读取用户输入并发送倒后端执行，输出返回结果后等待下一次输入。后端需要解析SQL语句，识别合法语句后就尝试执行并返回结果。不包括SQL语句解析器，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目结构">
+<meta property="og:url" content="http://example.com/2025-06-16/fa00f1b5e0ef/index.html">
+<meta property="og:site_name" content="果茶小站">
+<meta property="og:description" content="本项目照抄自[MYDB](一起写个数据库 —— 0. 项目结构和一些不得不说的话 - MYDB - 项目 - 计算机 | ziyang balabala~ &#x3D; 菜狗の日常).整体分为后端和前端，之间通过socket进行交互。前端即客户端职责单一，读取用户输入并发送倒后端执行，输出返回结果后等待下一次输入。后端需要解析SQL语句，识别合法语句后就尝试执行并返回结果。不包括SQL语句解析器，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-06-16T07:37:47.000Z">
+<meta property="article:modified_time" content="2025-08-11T09:19:54.000Z">
+<meta property="article:author" content="OrangeFruitTea">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>项目结构 - 果茶小站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/Background.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="项目结构"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-06-16 15:37" pubdate>
+          2025年6月16日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">项目结构</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本项目照抄自[MYDB](<a target="_blank" rel="noopener" href="https://cn-guoziyang.github.io/article/mydb0.html">一起写个数据库 —— 0. 项目结构和一些不得不说的话 - MYDB - 项目 - 计算机 | ziyang balabala~ &#x3D; 菜狗の日常</a>).整体分为<a href="%E5%8F%8C%E7%AB%AF%E5%AE%9E%E7%8E%B0%E5%8F%8A%E9%80%9A%E4%BF%A1%E8%A7%84%E5%88%99">后端和前端</a>，之间通过<code>socket</code>进行交互。<br>前端即客户端职责单一，读取用户输入并发送倒后端执行，输出返回结果后等待下一次输入。后端需要解析SQL语句，识别合法语句后就尝试执行并返回结果。<br>不包括SQL语句解析器，MYDB后端分为五个模块，每个模块之间通过接口向其依赖的模块提供方法：</p>
+<ul>
+<li>[[事务管理]](Transaction Manager, TM）：通过维护<code>.xid</code>文件来维护事务状态，并提供接口供其他模块来查询某个事务的状态。</li>
+<li>[[数据管理]](Data Manager, DM)：直接管理数据库<code>.db</code>文件和<code>.log</code>日志文件，主要有以下职责：<ol>
+<li>分数据页管理DB文件并进行缓存</li>
+<li>管理日志文件，保证出错时可根据日志进行恢复</li>
+<li>抽象DB文件为<code>DataItem</code>类供上层模块使用，并提供缓存</li>
+</ol>
+</li>
+<li>[[版本管理]](Version Manager, VM)：通过两端锁协议实现可串行的调度序列，并实现MVCC以消除读写堵塞，并实现两种隔离级别。</li>
+<li>[[索引管理]](Index Manager, IM)：实现基于B+树的索引。<code>where</code>子句仅支持已索引字段。</li>
+<li>[[字段和表管理]](Table Manager, TBM)：实现对字段和表的管理，同时解析SQL语句，根据语句内容对表进行操作。</li>
+</ul>
+<h3 id="先总结一下各个模块提供的操作"><a href="#先总结一下各个模块提供的操作" class="headerlink" title="先总结一下各个模块提供的操作,"></a>先总结一下各个模块提供的操作,</h3><ul>
+<li>DM: <code>insert(x), update(x), read(x)</code><br>  DM提供了针对数据项(DataItem)的基本插入, 更新, 读取操作, 且这些操作是原子性的. DM会直接对数据库文件进行读写.</li>
+<li>TM: <code>begin, commit(T), abort(T), isActive(T),isCommitted(T),isAborted(T)</code><br>  TM提供了针对事务的开始, 提交, 回滚操作, 同时提供了对数据项状态的查询操作.</li>
+<li>VM: <code>insert(X), update(X), read(X), delete(X)</code><br>  VM提供了针对记录(entry)的增删查改操作, VM在内部为每条记录维护多个版本, 并根据不同的事务, 返回不同的版本. VM对这些实现, 是建立在DM和TM的各个操作上的，还有一个事务可见性类Visibility。</li>
+<li>TBM: <code>execute(statement)</code><br>  TBM就是非常高层的模块了, 他能直接执行用户输入的语句(statement), 然后进行执行. TBM对语句的执行是建立在VM和IM提供的各个操作上的.</li>
+<li>IM: <code>value search(key), insert(key, value)</code><br>  IM提供了对索引的基本操作.</li>
+</ul>
+<h3 id="read语句的流程"><a href="#read语句的流程" class="headerlink" title="read语句的流程"></a>read语句的流程</h3><p>假设现在要执行<code>read * from student where id = 2012141461290</code>, 并且在id上已经建有索引. 执行过程如下:</p>
+<ol>
+<li>TBM接受语句, 并进行解析.  </li>
+<li>TBM调用IM的<code>search</code>方法, 查找对应记录所在的地址.  </li>
+<li>TBM调用VM的<code>read</code>方法, 并将地址作为参数, 从VM中尝试读取记录内容.  </li>
+<li>VM通过DM的<code>read</code>操作, 读取该条记录的最新版本.  </li>
+<li>VM检测该版本是否对该事务可见, 其中需要<code>Visibility.isVisible()</code>方法.  </li>
+<li>如果可见, 则返回该版本的数据.  </li>
+<li>如果不可见, 则读取上一个版本, 并重复5, 6, 7.  </li>
+<li>TBM取得记录的二进制内容后, 对其进行解析, 还原出记录内容.  </li>
+<li>TBM将记录的内容返回给客户端.</li>
+</ol>
+<h3 id="insert语句的流程"><a href="#insert语句的流程" class="headerlink" title="insert语句的流程"></a>insert语句的流程</h3><p>假设现在要执行<code>insert into student values “zhangyuanjia” 2012141461290</code>这条语句. 执行过程如下:</p>
+<ol>
+<li>TBM接受语句, 并进行解析.  </li>
+<li>TBM将<code>values</code>的值, 二进制化.  </li>
+<li>TBM利用VM的<code>insert</code>操作, 将二进制化后的数据, 插入到数据库.  </li>
+<li>VM为该条数据建立版本控制, 并利用DM的<code>insert</code>操作, 将数据插入到数据库.  </li>
+<li>DM将数据插入到数据库, 并返回其被存储的地址.  </li>
+<li>VM将得到的地址, 作为该条记录的handler, 返回给TBM.  </li>
+<li>TBM计算该条语句的key, 并将handler作为data, 并调用IM的insert, 建立索引.  </li>
+<li>IM利用DM提供的<code>read</code>和<code>insert</code>等操作, 将key和data存入索引中.  </li>
+<li>TBM返回客户端插入成功的信息.</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>项目结构</div>
+      <div>http://example.com/2025-06-16/fa00f1b5e0ef/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>OrangeFruitTea</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年6月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025-06-16/c99cdb001933/" title="事务管理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">事务管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025-05-24/8bfe73c3f5d2/" title="数据库的完整性约束">
+                        <span class="hidden-mobile">数据库的完整性约束</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

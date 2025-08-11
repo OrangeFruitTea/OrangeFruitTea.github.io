@@ -1,0 +1,636 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon.png">
+  <link rel="icon" href="/img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="OrangeFruitTea">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="LSM（Log Structured Merge Tree）并非B+树或红黑树一样是严格的树状数据结构，它其实是一种基于日志结构的存储模型。LSM树的核心思想与特点是将写入操作优先写入内存中的日志结构，然后定期将内存中的数据合并到磁盘数据中，以此优化写入性能。传统的存储系统中，当一条数据被更新时，通常会直接找到原来的数据位置并原地进行修改，该操作称为随机写，因为每次写入操作都可能发生在磁盘的不同位">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据存储：LSM树">
+<meta property="og:url" content="http://example.com/2025-05-21/648beb34b693/index.html">
+<meta property="og:site_name" content="果茶小站">
+<meta property="og:description" content="LSM（Log Structured Merge Tree）并非B+树或红黑树一样是严格的树状数据结构，它其实是一种基于日志结构的存储模型。LSM树的核心思想与特点是将写入操作优先写入内存中的日志结构，然后定期将内存中的数据合并到磁盘数据中，以此优化写入性能。传统的存储系统中，当一条数据被更新时，通常会直接找到原来的数据位置并原地进行修改，该操作称为随机写，因为每次写入操作都可能发生在磁盘的不同位">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-21T13:07:32.000Z">
+<meta property="article:modified_time" content="2025-08-11T09:18:50.000Z">
+<meta property="article:author" content="OrangeFruitTea">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>数据存储：LSM树 - 果茶小站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/Background.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="数据存储：LSM树"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-05-21 21:07" pubdate>
+          2025年5月21日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">数据存储：LSM树</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>LSM（Log Structured Merge Tree）并非B+树或红黑树一样是严格的树状数据结构，它其实是一种基于日志结构的存储模型。LSM树的核心思想与特点是<strong>将写入操作优先写入内存中的日志结构，然后定期将内存中的数据合并到磁盘数据中</strong>，以此优化写入性能。<br>传统的存储系统中，当一条数据被更新时，通常会直接找到原来的数据位置并原地进行修改，该操作称为<em>随机写</em>，因为每次写入操作都可能发生在磁盘的不同位置，导致磁盘的读写头频繁移动，降低效率。<br>而LSM树在收到更新记录后，不会直接修改已有数据，而是将所有的数据操作记录（增删改）保存在内存当中作为日志文件（MemTable），当保存的操作达到一定量后再批量<em>顺序写入</em>到磁盘中。此时所有的写入操作都是追加到文件末尾，磁盘的读写头不需要频繁移动，效率更高。<br>但日志式写入不会修改已有的键值对，而是将新的键值对作为新记录追加到内存中，新旧记录会被同时写入磁盘，因此磁盘中可能包含重复的键值对记录，而最新的记录才是正确的。<br>这样设计虽然大大提高写入性能，但也出现新的问题：</p>
+<ul>
+<li>冗余存储。对于某个键值对，实际上只有最新的记录有用，其他无用记录仍旧战局内存空间，需要额外的Compact操作合并多个SSTable来清除冗余记录。</li>
+<li>读取数据时需要从最新的记录倒序查询，直到找到某个key的记录，最坏情况下需要查询所有的SSTable。这里可以通过索引&#x2F;布隆过滤器来优化查找速度。</li>
+</ul>
+<h1 id="组成部分"><a href="#组成部分" class="headerlink" title="组成部分"></a>组成部分</h1><p>LSM树有三个重要组成部分：<br><strong>MemTable 内存表</strong><br>MemTable是在内存中的数据结构，用于保存最艰难更新的数据，会按照Key有序地组织这些数据。LSM树对于如何组织数据没有明确的数据结构定义。<br>数据以键值对形式插入MemTable中，插入时间复杂度为<code>O(log n)</code>或<code>O(1)</code>。<br>由于数据暂时保存在内存中，而内存并非可靠存储，断电时会丢失数据，因此通常会通过预写式日志的方式保证数据的可靠。<br><strong>Immutable MemTable</strong><br>当MemTable达到一定大小后会冻结为Immutable MemTable。这是MemTable变为SSTable的一个中间状态。写操作会创建一个新的MemTable处理，保证转存过程不阻塞数据更新操作。<br><strong>SSTable 排序字符串表</strong><br>是LSM树在磁盘中的数据结构。SSTable是一个不可变的有序键值对文件，写入磁盘后内容不会被修改。</p>
+<h1 id="LSM的合并策略"><a href="#LSM的合并策略" class="headerlink" title="LSM的合并策略"></a>LSM的合并策略</h1><p>随着数据操作记录增多，SSTable中的数量会不断增长，其中冗余记录占比也会越大，因此需要合并SSTable。<br>LSM的合并策略基于三个重要概念上：</p>
+<ul>
+<li>读取放大：读取数据时实际的读取量大于真正的数据量。LSM树中，数据被分散存储在多个位置，包括MemTable和多个SSTable文件，读取数据需要依次在这些地方查找。并且因为可能的多版本相同键值对，实际读取的数据量会更大。</li>
+<li>写入放大：写入数据时实际写入的数据量大于真正的数据量。写入新数据时可能触发合并操作，大量键值对会被重新写入新的SSTable，导致实际写入量远大于该键值对的数据量。</li>
+<li>空间放大：数据实际占用的磁盘空间比数据的真实容量更多。对于一个键值对来说，只有最新的记录有效，之前的冗余记录都可以被回收。</li>
+</ul>
+<h2 id="大小分层策略"><a href="#大小分层策略" class="headerlink" title="大小分层策略"></a>大小分层策略</h2><p>大小分层（size-tiered）策略基于文件大小进行合并。它的核心思想是将SSTable按照大小分层，每一层的文件大小逐渐增加。当某一层文件数量达到阈值时触发合并操作，并移动到下一层。<br>该策略的写入性能较高，实现与维护相对简单。但由于数据可能分布在多个层级，会增加读取放大。<br>当层级达到一定数量时，最底层的单个SSTable大小会非常大，且即使对于同一层的SSTable，每个键值对的记录依然可能存在多份，只有达到阈值触发合并后才会消除这些冗余记录，因此会导致空间放大。 </p>
+<h2 id="层次化合并"><a href="#层次化合并" class="headerlink" title="层次化合并"></a>层次化合并</h2><p>层次化合并（leveled-compaction）的核心思想是将SSTable分为多个层次，每个层次的文件大小和数量都有严格限制，且每一层的SSTable全局有序，即一个键值对在每一层至多仅有1条记录。合并操作会定期在各个层次之间进行，以保持层次结构的平衡，合并后的SSTable同样也会被写入到下一层。<br>层次化合并的步骤如下：</p>
+<ol>
+<li>当L 1的大小超过L 1容量时，会从L 1中选择至少一个SSTable，然后把它和L 2<strong>有交集的部分</strong>进行合并，生成的文件放在L 2.</li>
+<li>如果L 2合并后的结果仍旧超出L 2的阈值大小，那么重复步骤1；多个不相干的合并可以并发执行。<br>这样的合并操作能让空间放大问题得到缓解，但写放大问题会更加突出：如果 Level N层某个SSTable的键值范围跨度很大，覆盖了Level N+1所有键值范围，那么合并时实际上会涉及N+1层的全部数据。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>数据存储：LSM树</div>
+      <div>http://example.com/2025-05-21/648beb34b693/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>OrangeFruitTea</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年5月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025-05-24/04dea9bc7c86/" title="数据库 事务">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库 事务</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025-05-21/11b5c62cd067/" title="数据存储：B+树">
+                        <span class="hidden-mobile">数据存储：B+树</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

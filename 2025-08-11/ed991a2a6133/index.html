@@ -1,0 +1,663 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon.png">
+  <link rel="icon" href="/img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="OrangeFruitTea">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="GC中最关键的部分则是用于判断哪些对象需要回收的标记算法。 引用计数算法引用计数法通过为每个对象提供一个引用计数来标记可回收的对象。当对象被引用一次时，引用计数+1，当一个引用被释放时，计数-1。当引用计数为零时，表示没有任何引用指向该对象，该对象可以被回收内存。优点   实时性能好：当一个对象没有引用时，该对象可以被立刻回收，释放内存资源。 简单高效：该算法在理解上相对高效简单。缺点  循环引用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="果茶小站">
+<meta property="og:url" content="http://example.com/2025-08-11/ed991a2a6133/index.html">
+<meta property="og:site_name" content="果茶小站">
+<meta property="og:description" content="GC中最关键的部分则是用于判断哪些对象需要回收的标记算法。 引用计数算法引用计数法通过为每个对象提供一个引用计数来标记可回收的对象。当对象被引用一次时，引用计数+1，当一个引用被释放时，计数-1。当引用计数为零时，表示没有任何引用指向该对象，该对象可以被回收内存。优点   实时性能好：当一个对象没有引用时，该对象可以被立刻回收，释放内存资源。 简单高效：该算法在理解上相对高效简单。缺点  循环引用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-08-11T08:20:17.620Z">
+<meta property="article:modified_time" content="2025-05-15T08:23:30.000Z">
+<meta property="article:author" content="OrangeFruitTea">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>果茶小站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/Background.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-08-11 16:20" pubdate>
+          2025年8月11日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>GC中最关键的部分则是用于判断哪些对象需要回收的标记算法。</p>
+<h2 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h2><p>引用计数法通过为每个对象提供一个引用计数来标记可回收的对象。当对象被引用一次时，引用计数+1，当一个引用被释放时，计数-1。当引用计数为零时，表示没有任何引用指向该对象，该对象可以被回收内存。<br><strong>优点</strong> </p>
+<ul>
+<li>实时性能好：当一个对象没有引用时，该对象可以被立刻回收，释放内存资源。</li>
+<li>简单高效：该算法在理解上相对高效简单。<br><strong>缺点</strong> </li>
+<li>循环引用：当存在循环引用情况下，对象之间的引用计数可能永不为零，导致内存泄漏。</li>
+<li>额外开销：每个对象都要维护一个引用技术及，会占据额外的内存空间。</li>
+<li>不支持并发：该算法在多线程环境下需要额外的同步操作来保证计数准确性，可能导致一定性能损失。</li>
+<li>实现繁琐：实现引用计数算法不算容易。<br>为了改进引用计数算法的循环引用问题，有两种主要方式进行改良。</li>
+</ul>
+<h3 id="延迟引用计数算法"><a href="#延迟引用计数算法" class="headerlink" title="延迟引用计数算法"></a>延迟引用计数算法</h3><p>此时的引用计数器不仅记录引用数量，还记录被引用对象可能的循环引用路径。<br><strong>工作原理</strong> </p>
+<ul>
+<li>每个对象都有一个引用计数器，记录指向该对象的引用数目。</li>
+<li>引用计数的变化与原算法相同。</li>
+<li>当引用计数器为零时，对象不会被立即释放，而是进入一个延迟释放队列。延迟释放队列会定期检查其中的对象是否存在循环引用。</li>
+<li>如果发现循环引用，则将其从延迟释放队列中移除，保留对象引用。如果不存在，则对象最终会被释放。<br>该算法通过延迟释放对象，允许系统在一定时间内检测和解决循环引用问题。但同样不支持并发， 并且额外开销较大。</li>
+</ul>
+<h3 id="sticky引用计数算法"><a href="#sticky引用计数算法" class="headerlink" title="sticky引用计数算法"></a>sticky引用计数算法</h3><p>该算法通过引入<code>sticky</code>机制解决循环引用问题，让每个对象的引用计数部分多出一个sticky指示位。具体原理为：</p>
+<ul>
+<li>引用计数变化与原算法相同。</li>
+<li>如果对象的引用计数器为零时，GC会检查其sticky指示位是否为真（是否为粘性引用）。</li>
+<li>如果存在粘性引用，GC会进一步检查粘性引用是否有效，如果仍有效，则引用计数递增，否则回收该对象。<br>该方法同样是使用额外内存检查循环引用后额外处理，因此同样有内存开销大、不支持并发等问题。</li>
+</ul>
+<h2 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h2><p>该算法的基本思路被称为根搜索算法，或标记-清除算法，是通过一系列成为<code>GC Roots</code>的根对象作为起始节点集，从这些节点开始根据引用关系向下搜索，搜索过程走过的路径称为引用链，如果每个对象到根对象之间没有任何引用链相连（即跟对象到该对象不可达），则证明该对象不可再被使用。<br>起始节点集可以包括在虚拟机栈（栈帧中的本地变量表）中引用的对象、再方法区中类静态属性引用的对象、在方法区中常量引用的对象、在本地方法栈中<code>Native</code>方法引用的对象等。<br>具体步骤如下：</p>
+<ul>
+<li>从根对象开始，将根对象标记为活动状态。</li>
+<li>遍历根对下给你的引用，将所有被引用的对象也标记为活动状态。</li>
+<li>迭代遍历被引用对象的引用，直到没有更多的对象被标记活动为止。</li>
+<li>未被标记的对象即为不可达对象，可以被回收释放内存。<br><strong>优点</strong></li>
+</ul>
+<ul>
+<li>简单高效：可达性分析算法使用了根搜索算法，具有简单高效的特点。</li>
+<li>没有标记阶段开销：与其他垃圾回收算法不同，可达性分析算法没有显式的标记阶段，减少了回收时间和开销。<br><strong>缺点</strong></li>
+<li>暂停应用程序：在执行垃圾回收时，可达性分析算法需要遍历对象引用关系图，导致应用程序的暂停。</li>
+<li>空间效率低：可达性分析算法可能导致一些存活对象被错误地判定为不可达对象，从而导致内存泄漏。</li>
+</ul>
+<h2 id="分代垃圾收集算法"><a href="#分代垃圾收集算法" class="headerlink" title="分代垃圾收集算法"></a>分代垃圾收集算法</h2><h3 id="分代收集理论"><a href="#分代收集理论" class="headerlink" title="分代收集理论"></a>分代收集理论</h3><p>分代收集理论实质是一套符合大多数程序运行实际情况的经验法则，它建立在两个分代假说上：</p>
+<ul>
+<li>弱分代假说：绝大多数对象都是朝生夕灭的。</li>
+<li>强分代假说：熬过越多次GC过程的对象就越难以消亡。<br>这两个分代假说共同奠定了多款常用垃圾收集器一致的设计原则：收集器应当将堆内存划分出不同区域，将回收对象基于其年龄（即熬过GC过程的次数）分配到不同区域中存储。<br>显而易见，当一个区域中大多数对象生命周期很短时，将它们集中在一处，每次回收时只关注如何保留少量存活对象而非标记需要被回收对象，就能以较低代价回收大量内存空间；如果剩下的都是难以消亡的对象，将它们集中在一块，虚拟机就能用较低的频率来回收该区域。这样就同时兼顾了GC的事件开销和内存空间的有效利用。<br>在堆内存被划分出不同区域后，GC才可以每次只回收某一个或某些部分的区域，因此产生了<code>Minor GC</code> 、<code>Major GC</code>、<code>Full GC</code>这样回收类型的区分，也才能针对不同的区域安排合适的GC算法——即“标记-复制算法”​“标记-清除算法”​“标记-整理算法”等针对性的GC算法。</li>
+</ul>
+<h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h3><p>最早出现也是最基础的GC算法，在1960年由John McCarthy所提出。算法分为标记与清除两个阶段：首先标记出所有需要回收的对象，然后统一回收这些对象占用的内存空间。<br>该算法有两个主要缺点：第一个是执行效率不稳定，如果堆内存中的大量对象都需要被回收，标记与清除的动作会重复多次，导致执行效率降低；第二个时清除对象后会产生大量不连续的内存碎片，导致以后程序运行需要分配较大内存时无法找到足够的连续内存，不得不提前执行另一次GC。</p>
+<h3 id="标记-复制算法"><a href="#标记-复制算法" class="headerlink" title="标记-复制算法"></a>标记-复制算法</h3><p>为了解决上述算法对大量可回收对象出现的效率低下问题，1969年Fenichel提出了一种称为“半区复制”(Semi-space Copying)的GC算法。其基本思想是将内存分为两块，每次只使用其中一块，当一块内存用完后，将仍存活的对象复制到另一块内存中，而原本的内存空间会被全部清理。</p>
+<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3><p>针对老年代对象的存亡特征，1974年Edward Lueders提出了另外一种有针对性的“标记-整理”(Mark-Compact)算法。该算法的标记过程与标记-清除算法一样，但后续步骤并非直接对可回收对象进行清理，而是让所有存活的对象都向内存空间的一侧移动，然后直接清理边界之外的内存。<br>但移动存活对象并更新所有引用地址同样开销巨大，并且这种移动操作必须全程暂停程序才能执行。</p>
+<h1 id="相关笔记"><a href="#相关笔记" class="headerlink" title="相关笔记"></a>相关笔记</h1><p>[[Java 垃圾回收]]<br>[[Java的内存布局]]</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://example.com/2025-08-11/ed991a2a6133/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>OrangeFruitTea</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年8月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025-08-11/9e18d219fc70/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025-08-11/558a4af5cf34/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,641 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon.png">
+  <link rel="icon" href="/img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="OrangeFruitTea">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="数据管理(Data Manager)将文件系统抽象成页面类，每次对文件系统的读写都以页面为单位，从文件系统读入的数据也是以页面为单位进行缓存。 页面缓存MYDB参考大部分数据库的设计将默认数据页大小定为8K，如果想要提升向数据库写入大量数据时的性能，可以适当增大该值。本模块需要对页面进行缓存，因此使用自行设计的缓存框架。该页面是存储在内存中的，与已经持久化存储在磁盘的抽象页有区别： 1234567">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DM模块的向下抽象">
+<meta property="og:url" content="http://example.com/2025-06-17/4e6ee98919ea/index.html">
+<meta property="og:site_name" content="果茶小站">
+<meta property="og:description" content="数据管理(Data Manager)将文件系统抽象成页面类，每次对文件系统的读写都以页面为单位，从文件系统读入的数据也是以页面为单位进行缓存。 页面缓存MYDB参考大部分数据库的设计将默认数据页大小定为8K，如果想要提升向数据库写入大量数据时的性能，可以适当增大该值。本模块需要对页面进行缓存，因此使用自行设计的缓存框架。该页面是存储在内存中的，与已经持久化存储在磁盘的抽象页有区别： 1234567">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-06-17T03:22:37.000Z">
+<meta property="article:modified_time" content="2025-08-11T09:19:34.000Z">
+<meta property="article:author" content="OrangeFruitTea">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>DM模块的向下抽象 - 果茶小站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/Background.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="DM模块的向下抽象"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-06-17 11:22" pubdate>
+          2025年6月17日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">DM模块的向下抽象</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>数据管理(Data Manager)将文件系统抽象成页面类，每次对文件系统的读写都以页面为单位，从文件系统读入的数据也是以页面为单位进行缓存。</p>
+<h1 id="页面缓存"><a href="#页面缓存" class="headerlink" title="页面缓存"></a>页面缓存</h1><p>MYDB参考大部分数据库的设计将默认数据页大小定为8K，如果想要提升向数据库写入大量数据时的性能，可以适当增大该值。本模块需要对页面进行缓存，因此使用<a href="%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%BC%93%E5%AD%98%E6%A1%86%E6%9E%B6">自行设计的缓存框架</a>。该页面是存储在内存中的，与已经持久化存储在磁盘的抽象页有区别：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PageImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Page</span> &#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-type">int</span> pageNumber;<br>	<span class="hljs-keyword">private</span> <span class="hljs-type">byte</span>[] data;<br>	<span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> dirty;<br>	<span class="hljs-keyword">private</span> Lock lock;<br><br>	<span class="hljs-keyword">private</span> PageCache pc;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>pageNumber</code>是该页面的页号，页号从1开始。<code>data</code>是该页实际包含的字节数据。<code>dirty</code>标志该页面是否为脏页面；缓存驱逐时，脏页面需要被写回磁盘。<code>PageCache</code>引用用来在拿到Page的引用后可以快速对该页面缓存进行释放。<br>页面缓存PageCache的接口如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">PageCache</span> &#123;<br>	<span class="hljs-type">int</span> <span class="hljs-title function_">newPage</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] initData)</span>;<br>	Page <span class="hljs-title function_">getPage</span><span class="hljs-params">(<span class="hljs-type">int</span> pgno)</span> <span class="hljs-keyword">throws</span> Exception;<br>	<span class="hljs-keyword">void</span> <span class="hljs-title function_">close</span><span class="hljs-params">()</span>;<br>	<span class="hljs-keyword">void</span> <span class="hljs-title function_">release</span><span class="hljs-params">(Page page)</span>;<br><br>	<span class="hljs-keyword">void</span> <span class="hljs-title function_">truncateByBgno</span><span class="hljs-params">(<span class="hljs-type">int</span> maxPgno)</span>;<br>	<span class="hljs-type">int</span> <span class="hljs-title function_">getPageNumber</span><span class="hljs-params">()</span>;<br>	<span class="hljs-keyword">void</span> <span class="hljs-title function_">flushPage</span><span class="hljs-params">(Page pg)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>页面缓存在具体实现时需要继承抽象缓存框架并实现两个抽象方法。由于数据源就是文件系统，<code>getForCache()</code>直接从文件中读取，并包裹为Page对象即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">protected</span> Page <span class="hljs-title function_">getForCache</span><span class="hljs-params">(<span class="hljs-type">long</span> key)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	<span class="hljs-type">int</span> <span class="hljs-variable">pgno</span> <span class="hljs-operator">=</span> (<span class="hljs-type">int</span>)key;<br>	<span class="hljs-type">long</span> <span class="hljs-variable">offset</span> <span class="hljs-operator">=</span> PageCacheImpl.pageOffset(pgno);<br>	<span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">buf</span> <span class="hljs-operator">=</span> ByteBuffer.allocate(PAGE_SIZE);<br>	fileLock.lock(); <br>	<span class="hljs-keyword">try</span> &#123; <br>		fc.position(offset);<br>		fc.read(buf); <br>	&#125; <span class="hljs-keyword">catch</span>(IOException e) &#123; Panic.panic(e); &#125; <br>	fileLock.unlock(); <br>	<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PageImpl</span>(pgno, buf.array(), <span class="hljs-built_in">this</span>); <br>&#125;<br><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">long</span> <span class="hljs-title function_">pageOffset</span><span class="hljs-params">(<span class="hljs-type">int</span> pgno)</span> &#123; <span class="hljs-comment">// 页号从 1 开始 </span><br>	<span class="hljs-keyword">return</span> (pgno-<span class="hljs-number">1</span>) * PAGE_SIZE;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>使用<code>releaseForCache()</code>驱逐页面时，也只需要根据页面是否dirty来决定是否需要写回文件系统：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">releaseForCache</span><span class="hljs-params">(Page pg)</span> &#123;<br>	<span class="hljs-keyword">if</span>(pg.isDirty()) &#123;<br>		flush(pg);<br>		pg.setDirty(<span class="hljs-literal">false</span>);<br>	&#125;<br>&#125;<br><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">flush</span><span class="hljs-params">(Page pg)</span> &#123;<br>	<span class="hljs-type">int</span> <span class="hljs-variable">pgno</span> <span class="hljs-operator">=</span> pg.getPageNumber();<br>	<span class="hljs-type">long</span> <span class="hljs-variable">offset</span> <span class="hljs-operator">=</span> pageOffset(pgno);<br>	fileLock.lock();<br>	<span class="hljs-keyword">try</span> &#123;<br>		<span class="hljs-type">ByteBuffer</span> <span class="hljs-variable">buf</span> <span class="hljs-operator">=</span> ByteBuffer.wrap(pg.getData());<br>		fc.position(offset);<br>		fc.write(buf);<br>		fc.force(<span class="hljs-literal">false</span>);<br>	&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123; Panic.panic(e); &#125;<br>	<span class="hljs-keyword">finally</span> &#123;<br>		fileLock.unlock();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>PageCache还使用一个<code>AtomicInteger</code>用于记录当前打开的数据库文件有多少页，该数字在数据库文件被打开时就会被计算，并在新建页面时自增。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">newPage</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] initData)</span> &#123;<br>	<span class="hljs-type">int</span> <span class="hljs-variable">pgno</span> <span class="hljs-operator">=</span> pageNumbers.incrementAndGet();<br>	<span class="hljs-type">Page</span> <span class="hljs-variable">pg</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PageImpl</span>(pgno, initData, <span class="hljs-literal">null</span>);<br>	flush(pg); <span class="hljs-comment">// 新建的页面需要被立刻写回</span><br>	<span class="hljs-keyword">return</span> pgno;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在这一设计中，同一条数据不允许跨页面存储，因此单条数据的大小不能超过数据页面的大小。</p>
+<h1 id="数据页管理"><a href="#数据页管理" class="headerlink" title="数据页管理"></a>数据页管理</h1><h2 id="第一页"><a href="#第一页" class="headerlink" title="第一页"></a>第一页</h2><p>数据库文件的第一页常用于一些特殊用途，例如存储元数据用于启动检查。MYDB的第一页数据页同样如此。具体原理是，在每次数据库启动时会生成一段随机字节，储存在第一页的100-107字节，数据库正常关闭时，会将该字节拷贝到第一页的108-115字节。数据库在每次启动时就会检查第一页两处的字节是否相同，以此判断上一次是否正常关闭，如果是异常关闭，则需要执行数据恢复流程。<br>启动时设置初始字节：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setVcOpen</span><span class="hljs-params">(Page pg)</span> &#123;<br>	pg.setDirty(<span class="hljs-literal">true</span>);<br>	setVcOpen(pg.getData());<br>&#125;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setVcOpen</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] raw)</span> &#123;<br>	System.arraycopy(RandomUtil.randomBytes(LEN_VC), <span class="hljs-number">0</span>, raw, OF_VC, LEN_VC);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>关闭的时候拷贝随机字节：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setVcClose</span><span class="hljs-params">(Page pg)</span> &#123;<br>	pg.setDirty(<span class="hljs-literal">true</span>);<br>	setVcClose(pg.getData());<br>&#125;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setVcClose</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] raw)</span> &#123;<br>	System.arraycopy(raw, OF_VC, raw, OF_VC + LEN_VC, LEN_VC);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>字节校验：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">chechVc</span><span class="hljs-params">(Page pg)</span> &#123;<br>	retrun <span class="hljs-title function_">checkVc</span><span class="hljs-params">(pg.getData()</span>);<br>&#125;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">checkVc</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] raw)</span> &#123;<br>	<span class="hljs-keyword">return</span> Arrays.equals(<br>		Arrays.copyOfRange(raw, OF_VC, OF_VC + LEN_VC),<br>		Arrays.copyOfRange(raw, OF_VC + LEN_VC, OF_VC + <span class="hljs-number">2</span>*LEN_VC));<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="普通页"><a href="#普通页" class="headerlink" title="普通页"></a>普通页</h2><p>MYDB中，一个普通页面以一个2字节无符号数起始，表示该页的空闲位置的偏移(Free Space Offset），其余部分都是实际存储的数据。对普通页的管理，基本都是围绕对FSO进行的。<br>例如向页面插入数据：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 将raw插入pg中，返回插入位置</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">short</span> <span class="hljs-title function_">insert</span><span class="hljs-params">(Page pg, <span class="hljs-type">byte</span>[] raw)</span> &#123;<br>	pg.setDirty(<span class="hljs-literal">true</span>);<br>	<span class="hljs-type">short</span> <span class="hljs-variable">offset</span> <span class="hljs-operator">=</span> getFSO(pg.getData());<br>	System.arraycopy(raw, <span class="hljs-number">0</span>, pg.getData(), offset, raw.length);<br>	setFSO(pg.getData(), (<span class="hljs-type">short</span>)(offset + raw.length));<br>	<span class="hljs-keyword">return</span> offset;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在写入之前获取FSO来确定写入的位置，并在写入后更新FSO：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setFSO</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] raw, <span class="hljs-type">short</span> ofData)</span> &#123;<br>	System.arraycopy(Parser.short2Byte(ofData), <span class="hljs-number">0</span>, raw, OF_FREE, OF_DATA);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">short</span> <span class="hljs-title function_">getFSO</span><span class="hljs-params">(Page pg)</span> &#123;<br>	<span class="hljs-keyword">return</span> getFSO(pg.getData());<br>&#125;<br><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">short</span> <span class="hljs-title function_">getFSO</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] raw)</span> &#123;<br>	<span class="hljs-keyword">return</span> Parser.parseShort(Arrays.copyOfRange(raw, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>));<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getFreeSpace</span><span class="hljs-params">(Page pg)</span> &#123;<br>	<span class="hljs-keyword">return</span> PageCache.PAGE_SIZE - (<span class="hljs-type">int</span>)getFSO(pg.getData());<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>剩余两个函数<code>recoverInsert()</code>和<code>recoverUpdate()</code>用于在数据库崩溃重启时恢复例程直接插入数据以及修改数据使用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 将raw插入pg中的offset位置，并将pg的offset设置为较大的那个</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">recoverInsert</span><span class="hljs-params">(Page pg,<span class="hljs-type">byte</span>[] raw, <span class="hljs-type">short</span> offset)</span> &#123;<br>	pg.setDirty(<span class="hljs-literal">true</span>);<br>	System.arraycopy(raw, <span class="hljs-number">0</span>, pg.getData(), offset, raw.length);<br><br>	<span class="hljs-type">short</span> <span class="hljs-variable">rawFSO</span> <span class="hljs-operator">=</span> getFSO(pg.getData());<br>	<span class="hljs-keyword">if</span> (rawFSO &lt; offset + raw.length) <br>		setFSO(pg.getData(), (<span class="hljs-type">short</span>)(offset+raw.length));<br>&#125;<br><br><span class="hljs-comment">// 将raw插入pg中的offset位置，不更新</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">recoverUpdate</span><span class="hljs-params">(Page pg, <span class="hljs-type">byte</span>[] raw, <span class="hljs-type">short</span> offset)</span> &#123;<br>	pg.setDirty(<span class="hljs-literal">true</span>);<br>	System.arraycopy(raw, <span class="hljs-number">0</span>, pg.getData(), offset, raw.length);<br>&#125;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>DM模块的向下抽象</div>
+      <div>http://example.com/2025-06-17/4e6ee98919ea/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>OrangeFruitTea</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年6月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025-06-17/c1dd335ff70e/" title="日志文件">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">日志文件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025-06-17/b245750f24b5/" title="共享内存数组">
+                        <span class="hidden-mobile">共享内存数组</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

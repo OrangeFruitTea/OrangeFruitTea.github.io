@@ -227,15 +227,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/ed991a2a6133/" target="_self">
-          
+        <a href="/2025-06-18/7772fb057490/" target="_self">
+          DM模块的向上抽象：DataItem
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/ed991a2a6133/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-18/7772fb057490/" target="_self">
         <div>
-          GC中最关键的部分则是用于判断哪些对象需要回收的标记算法。 引用计数算法引用计数法通过为每个对象提供一个引用计数来标记可回收的对象。当对象被引用一次时，引用计数+1，当一个引用被释放时，计数-1。当引用计数为零时，表示没有任何引用指向该对象，该对象可以被回收内存。优点   实时性能好：当一个对象没有引用时，该对象可以被立刻回收，释放内存资源。 简单高效：该算法在理解上相对高效简单。缺点  循环引用
+          DataItem是DM层向上层提供的数据抽象。上层模块通过地址向DM请求到对应的DataItem，再获取到其中的数据。 1234567public class DataItemImpl implements DataItem &#123;	private SubArray raw;	private byte[] oldRaw;	private DataManagerImpl dm;	private
         </div>
       </a>
 
@@ -243,8 +243,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-11 16:20" pubdate>
-              2025-08-11
+            <time datetime="2025-06-18 17:29" pubdate>
+              2025-06-18
             </time>
           </div>
         
@@ -260,15 +260,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/558a4af5cf34/" target="_self">
-          
+        <a href="/2025-06-18/15bb3dd63e5b/" target="_self">
+          DM模块的页面索引
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/558a4af5cf34/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-18/15bb3dd63e5b/" target="_self">
         <div>
-          Java中的HashMap是一个基于哈希表实现的键值对存储结构。它提供了快速的插入、删除和查找操作，平均时间复杂度为O(1)。 底层HashMap的底层是一个数组（Node&lt;K,V&gt;[] table），每个数组元素称为一个桶。每个桶可以存储多个键值对，具体实现方式如下：  链表：当多个键映射到同一个桶时，这些键值对会以链表的形式存储在该桶中。 红黑树：当链表的长度超过一个阈值（默认为8
+          页面索引PageIndex缓存了每一个数据页的空闲空间，用于在上层模块进行插入操作时，能快速找到一个合适空间的页面，无需从磁盘或缓存中检查每一个页面信息。 MYDB用一个比较粗略的算法实现了页面索引，将每一页的空间划分成了40个区间。在数据库启动时，会遍历所有的页面信息，获取页面的空闲空间安排到这40个区间中。使用insert请求一个页时，会先将所需的空间向上取整，映射到某一个区间，随后取出这个空
         </div>
       </a>
 
@@ -276,8 +276,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-11 16:20" pubdate>
-              2025-08-11
+            <time datetime="2025-06-18 17:03" pubdate>
+              2025-06-18
             </time>
           </div>
         
@@ -293,15 +293,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/7f099cbf2998/" target="_self">
-          
+        <a href="/2025-06-17/48a8550475e1/" target="_self">
+          另一种日志恢复策略
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/7f099cbf2998/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/48a8550475e1/" target="_self">
         <div>
-          在Java I&#x2F;O体系中，流（Stream）分为字节流与字符流两大类。字节流：以字节为单位处理数据，包括InputStream与OutputStream体系。字符流：以字符为单位处理数据，包括Reader与Writer体系。 graph LR Reader --&gt; CharArrayReader Reader --&gt; BufferedReader BufferedReader
+          对于[[日志恢复策略]]中提及的两种多线程下的数据库恢复问题，除了像MYDB一样对数据库操作进行限制，还可以对日志进行增强设计和额外的并发控制来解决问题。 第一类问题是事务T1的更新依赖于事务T2，但T2因未提交需要回滚，而已提交的T1被持久化处理，导致T1依赖的数据源失效。这被称为级联提交异常或脏读提交冲突。违反了事务的隔离性原则。 第二类问题是事务T1与T2并发更新同一数据项，而T2的更新覆盖
         </div>
       </a>
 
@@ -309,8 +309,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-11 16:20" pubdate>
-              2025-08-11
+            <time datetime="2025-06-17 18:44" pubdate>
+              2025-06-17
             </time>
           </div>
         
@@ -326,15 +326,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/c40446f93688/" target="_self">
-          
+        <a href="/2025-06-17/f97fb2a2d350/" target="_self">
+          日志恢复策略
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/c40446f93688/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/f97fb2a2d350/" target="_self">
         <div>
-          Java中的异常主要分为两大类，受检查异常（Checked Exceptions） 和 非受检查异常（Unchecked Exceptions），二者都继承自java.lang.Throwable。 受检查异常指在编译时必须被显式处理的异常。通常由于外部环境或者运行时条件导致，例如文件找不到、网络连接失败等。受检查异常必须在方法的签名中声明（使用throws关键字），或者在方法内部用try-cat
+          恢复策略来自NYADB2的恢复策略。DM为上层模块提供了两种操作，分别是插入新数据（I操作）和更新现有数据（U操作），而没有删除数据（在版本管理时再作解释）。 DM的日志策略可以用一句话概括： 在进行 I 和 U 操作之前，必须先进行对应的日志操作，确保日志被写入磁盘后，才进行数据操作。 这一日志策略使DM对数据操作的磁盘同步能够更加随意，日志在数据操作前就到达了 磁盘，那么即使该数据操作没有及时
         </div>
       </a>
 
@@ -342,8 +342,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-11 16:20" pubdate>
-              2025-08-11
+            <time datetime="2025-06-17 18:04" pubdate>
+              2025-06-17
             </time>
           </div>
         
@@ -359,15 +359,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/322ce3a4d45b/" target="_self">
-          
+        <a href="/2025-06-17/c1dd335ff70e/" target="_self">
+          日志文件
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/322ce3a4d45b/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/c1dd335ff70e/" target="_self">
         <div>
-          Java虚拟机在执行Java程序时会把它管理的内存划分为若干不同的数据区域，主要包括以下几个，可按照线程所有权进行分类：线程私有：   程序计数器 栈（虚拟机栈） 本地方法栈**线程共享：  堆 方法区 直接内存（非运行时数据区的一部分）Java 虚拟机规范对于运行时数据区域的规定是相当宽松的。以堆为例：堆可以是连续空间，也可以不连续。堆的大小可以固定，也可以在运行时按需扩展。  程序计数器程序计
+          MYDB以日志文件为基础提供了崩溃后的数据恢复功能。DM层在每次对底层数据进行操作后，都会记录一条日志到磁盘上，当崩溃重启时，可以根据日志内容恢复数据文件，保证一致性。 日志读写 日志的二进制文件按照如下格式排布： 1[XChecksum][Log1][Log2][Log3]...[LogN][BadTail] 其中XChecksum是一个4字节int整数，是对后续所有日志计算得出的校验和。Log
         </div>
       </a>
 
@@ -375,8 +375,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-11 16:20" pubdate>
-              2025-08-11
+            <time datetime="2025-06-17 17:37" pubdate>
+              2025-06-17
             </time>
           </div>
         
@@ -392,15 +392,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/3373a1e49ec7/" target="_self">
-          
+        <a href="/2025-06-17/4e6ee98919ea/" target="_self">
+          DM模块的向下抽象
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/3373a1e49ec7/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/4e6ee98919ea/" target="_self">
         <div>
-          Java 8之前，在实现接口或继承类时，需要显式声明类名、方法名等，代码较为冗长，缺乏简洁的函数式接口支持。因此Java通过匿名内部类与Lambda表达式来解决该问题，即支持函数式编程。除此之外，二者还可用于代码简化、封装局部逻辑，实现事件处理器与回调函数。 函数式编程函数式编程是一种编程范式，它将计算视为数学函数的求值，避免使用可变数据结构与可变状态。Lambda表达式提供了一种简洁的方式来实现
+          数据管理(Data Manager)将文件系统抽象成页面类，每次对文件系统的读写都以页面为单位，从文件系统读入的数据也是以页面为单位进行缓存。 页面缓存 MYDB参考大部分数据库的设计将默认数据页大小定为8K，如果想要提升向数据库写入大量数据时的性能，可以适当增大该值。本模块需要对页面进行缓存，因此使用自行设计的缓存框架。该页面是存储在内存中的，与已经持久化存储在磁盘的抽象页有区别： 123456
         </div>
       </a>
 
@@ -408,8 +408,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-11 16:20" pubdate>
-              2025-08-11
+            <time datetime="2025-06-17 11:22" pubdate>
+              2025-06-17
             </time>
           </div>
         
@@ -425,15 +425,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/e2143ca0e3b5/" target="_self">
-          
+        <a href="/2025-06-17/b245750f24b5/" target="_self">
+          共享内存数组
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/e2143ca0e3b5/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/b245750f24b5/" target="_self">
         <div>
-          继承了父类的对象在初始化时，会先调用父类的构造函数 在调用一个类的构造函数之前，会先初始化该类中的成员变量 如果子类中存在与父类同名的成员变量，则子类成员变量会将父类的隐藏；如果需要访问父类同名变量，则可使用super.变量名访问一个对象的初始化过程：   初始化父类的静态成员变量与静态代码块； 初始化子类的静态成员变量与静态代码块； 初始化父类的普通成员变量和代码块，然后执行父类构造函数； 初
+          Java中将数组看作一个对象，在内存中，数组也是以对象的形式存储的，而 C、C++、Go等语言，数组是通过指针实现的，因此会出现一个情况：没法对同一片内存进行分区引用，Java在执行类似subArray操作时，底层只会执行一次复制，而非指向同一片内存空间。因此需要一个SubArray类来松散地规定一个数组的可使用范围： 1234567891011public class SubArray &#12
         </div>
       </a>
 
@@ -441,8 +441,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-11 16:20" pubdate>
-              2025-08-11
+            <time datetime="2025-06-17 11:15" pubdate>
+              2025-06-17
             </time>
           </div>
         
@@ -458,15 +458,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-08-11/dea1438b9ccc/" target="_self">
-          
+        <a href="/2025-06-17/60e1c630d6ff/" target="_self">
+          引用计数缓存框架
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-08-11/dea1438b9ccc/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/60e1c630d6ff/" target="_self">
         <div>
-          抽象类的主要目的是提供一个通用的类模板，允许子类继承并视线一些通用行为，同时也可以强制子类实现某些特定方法。抽象类无法直接实例化，而是作为其他类的基类使用。抽象类可以包含普通方法和成员变量，用于提供默认的视线，供子类继承&#x2F;使用；子类可以选择重写这些非抽象方法。抽象类可以不包含抽象方法。抽象方法必须位于抽象类内，即如果一个类包含方法， 那么这个类必须声明为抽象类。
+          由于数据管理(Data Manager)中的分野管理和数据项(DataItem)管理都设计缓存，因此需要设计一个更通用的缓存框架。这里采用引用计数缓存，而非LRU策略缓存。 这里首先从缓存的接口设计说起，如果使用 LRU 缓存，那么只需要设计一个 get(key) 接口即可，释放缓存可以在缓存满了之后自动完成。 设想这样一个场景：某个时刻缓存满了，缓存驱逐了一个资源，这时上层模块想要将某个资源强制
         </div>
       </a>
 
@@ -474,8 +474,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-11 16:20" pubdate>
-              2025-08-11
+            <time datetime="2025-06-17 10:51" pubdate>
+              2025-06-17
             </time>
           </div>
         
@@ -491,15 +491,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-07-29/d652fa742b62/" target="_self">
-          分布式系统构建
+        <a href="/2025-06-16/84e514291989/" target="_self">
+          字段和表管理
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-07-29/d652fa742b62/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-16/84e514291989/" target="_self">
         <div>
-          核心组件基础的分布式调用框架包含服务注册中心、服务提供者、服务消费者，支持：  服务注册与发现（服务地址的动态管理） 远程通信（基于TCP的自定义协议） 简单的负载均衡（轮询策略）  核心技术点 网络通信：使用Java NIO（非阻塞IO）实现TCP通信 序列化：自定义将Java对象转为字节流 服务注册：基于内存存储服务地址（在生产环境可用ZooKeeper&#x2F;Redis） 远程调用：模拟
+          此处的字段与表管理是指管理表和字段的数据结构，例如表名、表字段信息、字段索引等，不是管理各个条目中不同字段的数值信息。 由于TBM依赖于VM，单个字段信息和表信息都直接保存在了Entry中。 字段的二进制表示如下： 1[FieldName][TypeName][IndexUid] 三部分内容存储的都是字节形式的字符串。这里额外规定字符串的存储方式以明确存储边界： 1[StringLength][S
         </div>
       </a>
 
@@ -507,8 +507,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-07-29 08:48" pubdate>
-              2025-07-29
+            <time datetime="2025-06-16 15:50" pubdate>
+              2025-06-16
             </time>
           </div>
         
@@ -524,15 +524,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-07-08/6e8a6f975120/" target="_self">
-          网络报文发送流程
+        <a href="/2025-06-16/266bf6e8430a/" target="_self">
+          索引管理
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-07-08/6e8a6f975120/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-16/266bf6e8430a/" target="_self">
         <div>
-          下面以 “用户通过浏览器发送请求到服务器” 为例，详细讲解 TCP&#x2F;IP 协议发送报文的完整流程： 一、TCP&#x2F;IP 协议栈的层次结构TCP&#x2F;IP 协议栈分为 4 层（或 5 层，此处以 4 层为例），发送报文时遵循 “自上而下封装” 原则，每层会添加本层的头部信息（类似 “信封”），最终形成可在网络中传输的 “帧”。4 层结构及功能如下：    层次 核心功能 代表
+          索引管理器位MYDB提供了基于B+树的聚簇索引。目前MYDB只支持基于索引查找数据，不支持全表扫描。IM直接依赖于DM，而没有基于VM。索引的数据会被直接插入数据库文件中，不需要经过版本管理。 二叉树索引 二叉树由多个节点Node组成，每个Node都存储在一条DataItem中。结构如下： 12[LeadFlag][KeyNumber][SiblingUid][Son0][Key0][Son1][
         </div>
       </a>
 
@@ -540,8 +540,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-07-08 17:07" pubdate>
-              2025-07-08
+            <time datetime="2025-06-16 15:50" pubdate>
+              2025-06-16
             </time>
           </div>
         

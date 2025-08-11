@@ -19,12 +19,12 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="系统架构 前端服务 后台管理系统（Vue） 前台商城系统（uni-app）   网关服务（Nginx） 后端服务（SpringBoot） 数据存储 主要业务数据存储（MySql） 缓存数据存储（Redis） 用户行为分析数据存储（MongoDB） 搜索数据存储（Elastic search）   日志收集 Kibana Elasticsearch Logstash   异步通信&#x2F;消息队列">
+    <meta name="description" content="系统架构  前端服务  后台管理系统（Vue） 前台商城系统（uni-app）   网关服务（Nginx） 后端服务（SpringBoot） 数据存储  主要业务数据存储（MySql） 缓存数据存储（Redis） 用户行为分析数据存储（MongoDB） 搜索数据存储（Elastic search）   日志收集  Kibana Elasticsearch Logstash   异步通信&#x2F;消息队列（">
 <meta property="og:type" content="article">
 <meta property="og:title" content="项目系统架构">
 <meta property="og:url" content="http://example.com/2025-07-02/97e3a71ab2f4/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="系统架构 前端服务 后台管理系统（Vue） 前台商城系统（uni-app）   网关服务（Nginx） 后端服务（SpringBoot） 数据存储 主要业务数据存储（MySql） 缓存数据存储（Redis） 用户行为分析数据存储（MongoDB） 搜索数据存储（Elastic search）   日志收集 Kibana Elasticsearch Logstash   异步通信&#x2F;消息队列">
+<meta property="og:description" content="系统架构  前端服务  后台管理系统（Vue） 前台商城系统（uni-app）   网关服务（Nginx） 后端服务（SpringBoot） 数据存储  主要业务数据存储（MySql） 缓存数据存储（Redis） 用户行为分析数据存储（MongoDB） 搜索数据存储（Elastic search）   日志收集  Kibana Elasticsearch Logstash   异步通信&#x2F;消息队列（">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-07-02T07:29:12.000Z">
 <meta property="article:modified_time" content="2025-08-11T09:20:36.000Z">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          382 字
+          378 字
         
       </span>
     
@@ -275,33 +275,40 @@
             
               <div class="markdown-body">
                 
-                <h1 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h1><ol>
-<li>前端服务<ul>
+                <h1>系统架构</h1>
+<ol>
+<li>前端服务
+<ul>
 <li>后台管理系统（Vue）</li>
 <li>前台商城系统（uni-app）</li>
 </ul>
 </li>
 <li>网关服务（Nginx）</li>
 <li>后端服务（SpringBoot）</li>
-<li>数据存储<ul>
+<li>数据存储
+<ul>
 <li>主要业务数据存储（MySql）</li>
 <li>缓存数据存储（Redis）</li>
 <li>用户行为分析数据存储（MongoDB）</li>
 <li>搜索数据存储（Elastic search）</li>
 </ul>
 </li>
-<li>日志收集<ul>
+<li>日志收集
+<ul>
 <li>Kibana</li>
 <li>Elasticsearch</li>
 <li>Logstash</li>
 </ul>
 </li>
-<li>异步通信&#x2F;消息队列（RabbitMQ）</li>
-<li>文件存储&#x2F;对象存储（OSS&#x2F;MiniO）</li>
+<li>异步通信/消息队列（RabbitMQ）</li>
+<li>文件存储/对象存储（OSS/MiniO）</li>
 <li>容器化部署（Docker）</li>
-<li>持续集成&#x2F;自动化部署（Jenkins）<br>![[mall项目系统架构图.jpg]]</li>
+<li>持续集成/自动化部署（Jenkins）<br>
+![[mall项目系统架构图.jpg]]</li>
 </ol>
-<h1 id="项目使用技术"><a href="#项目使用技术" class="headerlink" title="项目使用技术"></a>项目使用技术</h1><h2 id="后端技术"><a href="#后端技术" class="headerlink" title="后端技术"></a>后端技术</h2><table>
+<h1>项目使用技术</h1>
+<h2 id="后端技术">后端技术</h2>
+<table>
 <thead>
 <tr>
 <th>技术</th>
@@ -309,7 +316,8 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>SpringBoot</td>
 <td>2.7.5</td>
 <td>容器+MVC框架</td>
@@ -399,15 +407,18 @@
 <td>0.40.2</td>
 <td>应用打包成Docker镜像的Maven插件</td>
 </tr>
-</tbody></table>
-<h2 id="前端技术"><a href="#前端技术" class="headerlink" title="前端技术"></a>前端技术</h2><table>
+</tbody>
+</table>
+<h2 id="前端技术">前端技术</h2>
+<table>
 <thead>
 <tr>
 <th>技术</th>
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>Vue</td>
 <td>前端框架</td>
 </tr>
@@ -443,15 +454,18 @@
 <td>vue-element-admin</td>
 <td>项目脚手架参考</td>
 </tr>
-</tbody></table>
-<h2 id="移动端技术"><a href="#移动端技术" class="headerlink" title="移动端技术"></a>移动端技术</h2><table>
+</tbody>
+</table>
+<h2 id="移动端技术">移动端技术</h2>
+<table>
 <thead>
 <tr>
 <th>技术</th>
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>Vue</td>
 <td>核心前端框架</td>
 </tr>
@@ -471,7 +485,8 @@
 <td>luch-request</td>
 <td>HTTP请求框架</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 
                 
               </div>

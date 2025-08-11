@@ -277,16 +277,21 @@
                 
                 <p>SQL默认支持一组统计表达式，可以完成诸如计数，求平均等。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-operator">/</span><span class="hljs-operator">/</span> 对全部结果数据统计<br><span class="hljs-keyword">SELECT</span> AGG_FUNC(column_or_expression) <span class="hljs-keyword">AS</span> aggregate_description, … <br>	<span class="hljs-keyword">FROM</span> mytable <br>	<span class="hljs-keyword">WHERE</span> constraint_expression_<br>	<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> <span class="hljs-keyword">column</span>;<br></code></pre></td></tr></table></figure>
-<p>如果不知名如何分组，统计函数将对查询结果的全部数据进行统计。<br><strong>常用的统计函数</strong></p>
+<p>如果不知名如何分组，统计函数将对查询结果的全部数据进行统计。<br>
+<strong>常用的统计函数</strong></p>
 <ul>
 <li><code>count(*)</code>,<code>count(column)</code>：计数，前者统计数据行数，后者统计column中非空行数。</li>
 <li><code>min(column)</code>：最小值的一行。</li>
 <li><code>max(column)</code>：最大值的一行。</li>
 <li><code>avg(column)</code>：所有行求平均。</li>
-<li><code>sum(column)</code>：所有行求和。<br><strong>分组统计</strong><br><code>group by</code>分组语法可以按照某列对数据进行分组，例如<code>group by Year</code>会将数据按年份分组，相同年份的数据分在一组中。将统计函数与分组结合，那么统计结果就i是对分组内的数据进行统计了。分组后的数量有多少，就会返回多少行数据。<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> agg_func(column_or_expression) <span class="hljs-keyword">as</span> aggregate_description, …<br>	<span class="hljs-keyword">from</span> mytable<br>	<span class="hljs-keyword">where</span> constraint_expression<br>	<span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> <span class="hljs-keyword">column</span>;<br></code></pre></td></tr></table></figure>
-数据库会先对处理<code>where</code>子句，然后对结果做分组，如果要对分组后的数据再做筛选，则可以使用<code>having</code>语句解决该问题。<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> agg_func(column_or_expression) <span class="hljs-keyword">as</span> aggregate_description, …<br>	<span class="hljs-keyword">from</span> mytable<br>	<span class="hljs-keyword">where</span> constraint_expression<br>	<span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> <span class="hljs-keyword">column</span><br>	<span class="hljs-keyword">having</span> group_condition;<br></code></pre></td></tr></table></figure>
-<code>having</code>与<code>where</code>语法效果相同，只不过作用的结果集不同。</li>
+<li><code>sum(column)</code>：所有行求和。<br>
+<strong>分组统计</strong><br>
+<code>group by</code>分组语法可以按照某列对数据进行分组，例如<code>group by Year</code>会将数据按年份分组，相同年份的数据分在一组中。将统计函数与分组结合，那么统计结果就i是对分组内的数据进行统计了。分组后的数量有多少，就会返回多少行数据。</li>
 </ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> agg_func(column_or_expression) <span class="hljs-keyword">as</span> aggregate_description, …<br>	<span class="hljs-keyword">from</span> mytable<br>	<span class="hljs-keyword">where</span> constraint_expression<br>	<span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> <span class="hljs-keyword">column</span>;<br></code></pre></td></tr></table></figure>
+<p>数据库会先对处理<code>where</code>子句，然后对结果做分组，如果要对分组后的数据再做筛选，则可以使用<code>having</code>语句解决该问题。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> agg_func(column_or_expression) <span class="hljs-keyword">as</span> aggregate_description, …<br>	<span class="hljs-keyword">from</span> mytable<br>	<span class="hljs-keyword">where</span> constraint_expression<br>	<span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> <span class="hljs-keyword">column</span><br>	<span class="hljs-keyword">having</span> group_condition;<br></code></pre></td></tr></table></figure>
+<p><code>having</code>与<code>where</code>语法效果相同，只不过作用的结果集不同。</p>
 
                 
               </div>

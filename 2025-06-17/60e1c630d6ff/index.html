@@ -19,12 +19,12 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="由于数据管理(Data Manager)中的分野管理和数据项(DataItem)管理都设计缓存，因此需要设计一个更通用的缓存框架。这里采用引用计数缓存，而非LRU策略缓存。这里首先从缓存的接口设计说起，如果使用 LRU 缓存，那么只需要设计一个 get(key) 接口即可，释放缓存可以在缓存满了之后自动完成。设想这样一个场景：某个时刻缓存满了，缓存驱逐了一个资源，这时上层模块想要将某个资源强制刷回">
+    <meta name="description" content="由于数据管理(Data Manager)中的分野管理和数据项(DataItem)管理都设计缓存，因此需要设计一个更通用的缓存框架。这里采用引用计数缓存，而非LRU策略缓存。 这里首先从缓存的接口设计说起，如果使用 LRU 缓存，那么只需要设计一个 get(key) 接口即可，释放缓存可以在缓存满了之后自动完成。 设想这样一个场景：某个时刻缓存满了，缓存驱逐了一个资源，这时上层模块想要将某个资源强制">
 <meta property="og:type" content="article">
 <meta property="og:title" content="引用计数缓存框架">
 <meta property="og:url" content="http://example.com/2025-06-17/60e1c630d6ff/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="由于数据管理(Data Manager)中的分野管理和数据项(DataItem)管理都设计缓存，因此需要设计一个更通用的缓存框架。这里采用引用计数缓存，而非LRU策略缓存。这里首先从缓存的接口设计说起，如果使用 LRU 缓存，那么只需要设计一个 get(key) 接口即可，释放缓存可以在缓存满了之后自动完成。设想这样一个场景：某个时刻缓存满了，缓存驱逐了一个资源，这时上层模块想要将某个资源强制刷回">
+<meta property="og:description" content="由于数据管理(Data Manager)中的分野管理和数据项(DataItem)管理都设计缓存，因此需要设计一个更通用的缓存框架。这里采用引用计数缓存，而非LRU策略缓存。 这里首先从缓存的接口设计说起，如果使用 LRU 缓存，那么只需要设计一个 get(key) 接口即可，释放缓存可以在缓存满了之后自动完成。 设想这样一个场景：某个时刻缓存满了，缓存驱逐了一个资源，这时上层模块想要将某个资源强制">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-06-17T02:51:17.000Z">
 <meta property="article:modified_time" content="2025-08-11T09:19:34.000Z">
@@ -275,16 +275,24 @@
             
               <div class="markdown-body">
                 
-                <p>由于数据管理(Data Manager)中的分野管理和数据项(DataItem)管理都设计缓存，因此需要设计一个更通用的缓存框架。这里采用引用计数缓存，而非LRU策略缓存。<br>这里首先从缓存的接口设计说起，如果使用 LRU 缓存，那么只需要设计一个 get(key) 接口即可，释放缓存可以在缓存满了之后自动完成。<br>设想这样一个场景：某个时刻缓存满了，缓存驱逐了一个资源，这时上层模块想要将某个资源强制刷回数据源，这个资源恰好是刚刚被驱逐的资源。那么上层模块就发现，这个数据在缓存里消失了，这时候就陷入了一种尴尬的境地：是否有必要做回源操作？ </p>
+                <p>由于数据管理(Data Manager)中的分野管理和数据项(DataItem)管理都设计缓存，因此需要设计一个更通用的缓存框架。这里采用引用计数缓存，而非LRU策略缓存。<br>
+这里首先从缓存的接口设计说起，如果使用 LRU 缓存，那么只需要设计一个 get(key) 接口即可，释放缓存可以在缓存满了之后自动完成。<br>
+设想这样一个场景：某个时刻缓存满了，缓存驱逐了一个资源，这时上层模块想要将某个资源强制刷回数据源，这个资源恰好是刚刚被驱逐的资源。那么上层模块就发现，这个数据在缓存里消失了，这时候就陷入了一种尴尬的境地：是否有必要做回源操作？</p>
 <ul>
-<li>不回源。由于没法确定缓存被驱逐的时间，更没法确定被驱逐之后数据项是否被修改，这样是极其不安全的 </li>
-<li>回源。如果数据项被驱逐时的数据和现在又是相同的，那就是一次无效回源 放回缓存里，等下次被驱逐时回源。看起来解决了问题，但是此时缓存已经满了，这意味着你还需要驱逐一个资源才能放进去。这有可能会导致缓存抖动问题<br>当然我们可以记录下资源的最后修改时间，并且让缓存记录下资源被驱逐的时间。但是如无必要，无增实体。<br>问题的根源还是，LRU 策略中，<strong>资源驱逐不可控，上层模块无法感知</strong>。而引用计数策略正好解决了这个问题，只有上层模块主动释放引用，缓存在确保没有模块在使用这个资源了，才会去驱逐资源。 这就是引用计数法了。增加了一个方法 release(key) ，用于在上册模块不使用某个资源时，释放对资源的引用。当引用归零时，缓存就会驱逐这个资源。 同样，在缓存满了之后，引用计数法无法自动释放缓存，此时应该直接报错（和 JVM 一样，直接 OOM）。、</li>
+<li>不回源。由于没法确定缓存被驱逐的时间，更没法确定被驱逐之后数据项是否被修改，这样是极其不安全的</li>
+<li>回源。如果数据项被驱逐时的数据和现在又是相同的，那就是一次无效回源 放回缓存里，等下次被驱逐时回源。看起来解决了问题，但是此时缓存已经满了，这意味着你还需要驱逐一个资源才能放进去。这有可能会导致缓存抖动问题<br>
+当然我们可以记录下资源的最后修改时间，并且让缓存记录下资源被驱逐的时间。但是如无必要，无增实体。<br>
+问题的根源还是，LRU 策略中，<strong>资源驱逐不可控，上层模块无法感知</strong>。而引用计数策略正好解决了这个问题，只有上层模块主动释放引用，缓存在确保没有模块在使用这个资源了，才会去驱逐资源。 这就是引用计数法了。增加了一个方法 release(key) ，用于在上册模块不使用某个资源时，释放对资源的引用。当引用归零时，缓存就会驱逐这个资源。 同样，在缓存满了之后，引用计数法无法自动释放缓存，此时应该直接报错（和 JVM 一样，直接 OOM）。、</li>
 </ul>
-<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>MYDB中我们会实现一个<code>AbstractCache&lt;T&gt;</code>抽象类，并设计两个抽象方法：</p>
+<h1>实现</h1>
+<p>MYDB中我们会实现一个<code>AbstractCache&lt;T&gt;</code>抽象类，并设计两个抽象方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 资源不在缓存时的获取行为</span><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> T <span class="hljs-title function_">getForCache</span><span class="hljs-params">(<span class="hljs-type">long</span> key)</span> <span class="hljs-keyword">throws</span> Exception;<br><span class="hljs-comment">// 资源被驱逐时的写回行为</span><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">releaseForCache</span><span class="hljs-params">(T obj)</span>;<br></code></pre></td></tr></table></figure>
 <p>除了普通的缓存功能，框架还需要维护每个资源的引用计数，为了应对多线程场景，还需要记录哪些资源正在从数据源中被获取（获取资源是一个相对费时的操作），于是需要设计如下三个Map：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> HashMap&lt;Long, T&gt; cache; <span class="hljs-comment">// 实际缓存的数据</span><br><span class="hljs-keyword">private</span> HashMap&lt;Long, Integer&gt; references; <span class="hljs-comment">// 资源的引用个数</span><br><span class="hljs-keyword">private</span> HashMap&lt;Long, Boolean&gt; getting; <span class="hljs-comment">// 正在被获取的资源</span><br></code></pre></td></tr></table></figure>
-<p>在通过<code>get()</code>方法获取资源时，需要进入一个死循环来无限尝试从缓存里获取。首先需要检查此时是否有其他线程正在从数据源获取该资源（getting里是否有对应资源），如果有，就让线程休眠短暂时间，过段时间再继续循环。<br>如果资源在缓存中，可以直接获取并返回，并给资源的引用计数+1，否则，如果缓存没满时，就先在getting中注册该资源，并开始<code>getForCache()</code>。获取完成后要记得从getting中删除对应key。<br>释放一个缓存则直接让引用计数-1，如果减到0则可以回源，并删除缓存中所有相关的结构。<br>缓存还应当有一个安全关闭的功能，关闭时需要将缓存中的所有资源强制回源。</p>
+<p>在通过<code>get()</code>方法获取资源时，需要进入一个死循环来无限尝试从缓存里获取。首先需要检查此时是否有其他线程正在从数据源获取该资源（getting里是否有对应资源），如果有，就让线程休眠短暂时间，过段时间再继续循环。<br>
+如果资源在缓存中，可以直接获取并返回，并给资源的引用计数+1，否则，如果缓存没满时，就先在getting中注册该资源，并开始<code>getForCache()</code>。获取完成后要记得从getting中删除对应key。<br>
+释放一个缓存则直接让引用计数-1，如果减到0则可以回源，并删除缓存中所有相关的结构。<br>
+缓存还应当有一个安全关闭的功能，关闭时需要将缓存中的所有资源强制回源。</p>
 
                 
               </div>

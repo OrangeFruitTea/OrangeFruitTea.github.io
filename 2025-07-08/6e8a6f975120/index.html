@@ -19,12 +19,12 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="下面以 “用户通过浏览器发送请求到服务器” 为例，详细讲解 TCP&#x2F;IP 协议发送报文的完整流程： 一、TCP&#x2F;IP 协议栈的层次结构TCP&#x2F;IP 协议栈分为 4 层（或 5 层，此处以 4 层为例），发送报文时遵循 “自上而下封装” 原则，每层会添加本层的头部信息（类似 “信封”），最终形成可在网络中传输的 “帧”。4 层结构及功能如下：    层次 核心功能 代表">
+    <meta name="description" content="下面以 “用户通过浏览器发送请求到服务器” 为例，详细讲解 TCP&#x2F;IP 协议发送报文的完整流程： 一、TCP&#x2F;IP 协议栈的层次结构 TCP&#x2F;IP 协议栈分为 4 层（或 5 层，此处以 4 层为例），发送报文时遵循 “自上而下封装” 原则，每层会添加本层的头部信息（类似 “信封”），最终形成可在网络中传输的 “帧”。 4 层结构及功能如下：    层次 核心功能 代表性协议 封装的头部信息">
 <meta property="og:type" content="article">
 <meta property="og:title" content="网络报文发送流程">
 <meta property="og:url" content="http://example.com/2025-07-08/6e8a6f975120/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="下面以 “用户通过浏览器发送请求到服务器” 为例，详细讲解 TCP&#x2F;IP 协议发送报文的完整流程： 一、TCP&#x2F;IP 协议栈的层次结构TCP&#x2F;IP 协议栈分为 4 层（或 5 层，此处以 4 层为例），发送报文时遵循 “自上而下封装” 原则，每层会添加本层的头部信息（类似 “信封”），最终形成可在网络中传输的 “帧”。4 层结构及功能如下：    层次 核心功能 代表">
+<meta property="og:description" content="下面以 “用户通过浏览器发送请求到服务器” 为例，详细讲解 TCP&#x2F;IP 协议发送报文的完整流程： 一、TCP&#x2F;IP 协议栈的层次结构 TCP&#x2F;IP 协议栈分为 4 层（或 5 层，此处以 4 层为例），发送报文时遵循 “自上而下封装” 原则，每层会添加本层的头部信息（类似 “信封”），最终形成可在网络中传输的 “帧”。 4 层结构及功能如下：    层次 核心功能 代表性协议 封装的头部信息">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-07-08T09:07:16.000Z">
 <meta property="article:modified_time" content="2025-08-11T09:17:26.000Z">
@@ -275,8 +275,10 @@
             
               <div class="markdown-body">
                 
-                <p>下面以 “用户通过浏览器发送请求到服务器” 为例，详细讲解 TCP&#x2F;IP 协议发送报文的完整流程：</p>
-<h3 id="一、TCP-IP-协议栈的层次结构"><a href="#一、TCP-IP-协议栈的层次结构" class="headerlink" title="一、TCP&#x2F;IP 协议栈的层次结构"></a><strong>一、TCP&#x2F;IP 协议栈的层次结构</strong></h3><p>TCP&#x2F;IP 协议栈分为 4 层（或 5 层，此处以 4 层为例），发送报文时遵循 “自上而下封装” 原则，每层会添加本层的<strong>头部信息</strong>（类似 “信封”），最终形成可在网络中传输的 “帧”。<br>4 层结构及功能如下：</p>
+                <p>下面以 “用户通过浏览器发送请求到服务器” 为例，详细讲解 TCP/IP 协议发送报文的完整流程：</p>
+<h3 id="一、TCP-IP-协议栈的层次结构"><strong>一、TCP/IP 协议栈的层次结构</strong></h3>
+<p>TCP/IP 协议栈分为 4 层（或 5 层，此处以 4 层为例），发送报文时遵循 “自上而下封装” 原则，每层会添加本层的<strong>头部信息</strong>（类似 “信封”），最终形成可在网络中传输的 “帧”。<br>
+4 层结构及功能如下：</p>
 <table>
 <thead>
 <tr>
@@ -286,7 +288,8 @@
 <th>封装的头部信息</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>应用层</td>
 <td>处理用户数据（如 HTTP 请求、邮件）</td>
 <td>HTTP、FTP、SMTP、DNS</td>
@@ -310,19 +313,26 @@
 <td>Ethernet（以太网）</td>
 <td>源 MAC 地址、目的 MAC 地址、帧校验码</td>
 </tr>
-</tbody></table>
-<h3 id="二、发送报文的详细流程（封装过程）"><a href="#二、发送报文的详细流程（封装过程）" class="headerlink" title="二、发送报文的详细流程（封装过程）"></a><strong>二、发送报文的详细流程（封装过程）</strong></h3><p>假设用户在浏览器输入<code>www.example.com</code>并发送请求，报文发送步骤如下：</p>
-<h4 id="1-应用层：生成原始数据并添加应用层头部"><a href="#1-应用层：生成原始数据并添加应用层头部" class="headerlink" title="1. 应用层：生成原始数据并添加应用层头部"></a><strong>1. 应用层：生成原始数据并添加应用层头部</strong></h4><ul>
+</tbody>
+</table>
+<h3 id="二、发送报文的详细流程（封装过程）"><strong>二、发送报文的详细流程（封装过程）</strong></h3>
+<p>假设用户在浏览器输入<code>www.example.com</code>并发送请求，报文发送步骤如下：</p>
+<h4 id="1-应用层：生成原始数据并添加应用层头部"><strong>1. 应用层：生成原始数据并添加应用层头部</strong></h4>
+<ul>
 <li><strong>数据来源</strong>：应用程序（如浏览器）生成原始数据，例如 HTTP 请求（包含请求方法<code>GET</code>、目标 URL、请求头<code>Host: www.example.com</code>等）。</li>
-<li><strong>封装操作</strong>：应用层协议（如 HTTP）会给原始数据添加<strong>应用层头部</strong>（Header），形成 “应用层报文”。<ul>
+<li><strong>封装操作</strong>：应用层协议（如 HTTP）会给原始数据添加<strong>应用层头部</strong>（Header），形成 “应用层报文”。
+<ul>
 <li>例如：HTTP 头部会包含<code>User-Agent</code>（浏览器类型）、<code>Content-Length</code>（数据长度）等信息，用于告知服务器 “如何解析数据”。</li>
 </ul>
 </li>
 </ul>
-<h4 id="2-传输层：添加传输层头部（TCP-或-UDP）"><a href="#2-传输层：添加传输层头部（TCP-或-UDP）" class="headerlink" title="2. 传输层：添加传输层头部（TCP 或 UDP）"></a><strong>2. 传输层：添加传输层头部（TCP 或 UDP）</strong></h4><ul>
+<h4 id="2-传输层：添加传输层头部（TCP-或-UDP）"><strong>2. 传输层：添加传输层头部（TCP 或 UDP）</strong></h4>
+<ul>
 <li><strong>协议选择</strong>：若需可靠传输（如 HTTP、文件传输），使用 TCP；若需快速传输（如视频、语音），使用 UDP。此处以 TCP 为例。</li>
-<li><strong>封装操作</strong>：传输层将应用层报文作为 “数据部分”，添加<strong>TCP 头部</strong>，形成 “TCP 报文段”。<ul>
-<li>TCP 头部关键信息：<ul>
+<li><strong>封装操作</strong>：传输层将应用层报文作为 “数据部分”，添加<strong>TCP 头部</strong>，形成 “TCP 报文段”。
+<ul>
+<li>TCP 头部关键信息：
+<ul>
 <li><strong>源端口</strong>：客户端的端口（如浏览器随机分配的临时端口，如<code>54321</code>）；</li>
 <li><strong>目的端口</strong>：服务器的端口（如 HTTP 默认<code>80</code>，HTTPS 默认<code>443</code>）；</li>
 <li><strong>序号</strong>：TCP 是 “面向字节流” 的协议，序号用于标记数据顺序，确保接收端能按顺序重组；</li>
@@ -333,10 +343,13 @@
 </ul>
 </li>
 </ul>
-<h4 id="3-网络层：添加-IP-头部（跨网络传输的核心）"><a href="#3-网络层：添加-IP-头部（跨网络传输的核心）" class="headerlink" title="3. 网络层：添加 IP 头部（跨网络传输的核心）"></a><strong>3. 网络层：添加 IP 头部（跨网络传输的核心）</strong></h4><ul>
+<h4 id="3-网络层：添加-IP-头部（跨网络传输的核心）"><strong>3. 网络层：添加 IP 头部（跨网络传输的核心）</strong></h4>
+<ul>
 <li><strong>核心功能</strong>：网络层通过 IP 协议将 TCP 报文段封装为 “IP 数据报”，并通过<strong>IP 地址</strong>确定传输路径（路由选择）。</li>
-<li><strong>封装操作</strong>：网络层将 TCP 报文段作为 “数据部分”，添加<strong>IP 头部</strong>，形成 “IP 数据报”。<ul>
-<li>IP 头部关键信息：<ul>
+<li><strong>封装操作</strong>：网络层将 TCP 报文段作为 “数据部分”，添加<strong>IP 头部</strong>，形成 “IP 数据报”。
+<ul>
+<li>IP 头部关键信息：
+<ul>
 <li><strong>源 IP 地址</strong>：发送端的 IP（如客户端<code>192.168.1.100</code>）；</li>
 <li><strong>目的 IP 地址</strong>：接收端的 IP（如服务器<code>203.0.113.5</code>）；</li>
 <li><strong>协议字段</strong>：标记上层协议（如<code>6</code>代表 TCP，<code>17</code>代表 UDP），告知接收端该交给传输层的哪个协议处理；</li>
@@ -346,10 +359,13 @@
 </ul>
 </li>
 </ul>
-<h4 id="4-数据链路层：添加-MAC-头部（局域网内传输）"><a href="#4-数据链路层：添加-MAC-头部（局域网内传输）" class="headerlink" title="4. 数据链路层：添加 MAC 头部（局域网内传输）"></a><strong>4. 数据链路层：添加 MAC 头部（局域网内传输）</strong></h4><ul>
+<h4 id="4-数据链路层：添加-MAC-头部（局域网内传输）"><strong>4. 数据链路层：添加 MAC 头部（局域网内传输）</strong></h4>
+<ul>
 <li><strong>核心功能</strong>：数据链路层通过<strong>MAC 地址</strong>（硬件地址，如网卡物理地址）在局域网内传输数据，将 IP 数据报封装为 “帧”。</li>
-<li><strong>封装操作</strong>：数据链路层将 IP 数据报作为 “数据部分”，添加<strong>MAC 头部</strong>和<strong>帧尾</strong>（校验码），形成 “帧”。<ul>
-<li>MAC 头部关键信息：<ul>
+<li><strong>封装操作</strong>：数据链路层将 IP 数据报作为 “数据部分”，添加<strong>MAC 头部</strong>和<strong>帧尾</strong>（校验码），形成 “帧”。
+<ul>
+<li>MAC 头部关键信息：
+<ul>
 <li><strong>源 MAC 地址</strong>：发送端设备的网卡地址（如客户端电脑的 MAC）；</li>
 <li><strong>目的 MAC 地址</strong>：局域网内下一跳设备的 MAC（如路由器的 MAC，而非最终服务器的 MAC，因为跨网络传输需通过路由器转发）。</li>
 </ul>
@@ -357,17 +373,22 @@
 </ul>
 </li>
 </ul>
-<h4 id="5-物理层：将帧转换为电信号-光信号传输"><a href="#5-物理层：将帧转换为电信号-光信号传输" class="headerlink" title="5. 物理层：将帧转换为电信号 &#x2F; 光信号传输"></a><strong>5. 物理层：将帧转换为电信号 &#x2F; 光信号传输</strong></h4><p>物理层（如网线、光纤、无线信号）将数据链路层的 “帧” 转换为物理信号（如电脉冲、光脉冲），通过传输介质发送到下一个设备（如路由器、交换机）。</p>
-<h3 id="三、关键补充：路由转发中的-“MAC-地址动态更新”"><a href="#三、关键补充：路由转发中的-“MAC-地址动态更新”" class="headerlink" title="三、关键补充：路由转发中的 “MAC 地址动态更新”"></a><strong>三、关键补充：路由转发中的 “MAC 地址动态更新”</strong></h3><p>当报文需要跨多个网络（如从家庭 WiFi 到运营商网络，再到服务器所在网络）时，<strong>IP 地址不变</strong>（始终是源 IP 和目的 IP），但<strong>MAC 地址会逐跳更新</strong>：</p>
+<h4 id="5-物理层：将帧转换为电信号-光信号传输"><strong>5. 物理层：将帧转换为电信号 / 光信号传输</strong></h4>
+<p>物理层（如网线、光纤、无线信号）将数据链路层的 “帧” 转换为物理信号（如电脉冲、光脉冲），通过传输介质发送到下一个设备（如路由器、交换机）。</p>
+<h3 id="三、关键补充：路由转发中的-“MAC-地址动态更新”"><strong>三、关键补充：路由转发中的 “MAC 地址动态更新”</strong></h3>
+<p>当报文需要跨多个网络（如从家庭 WiFi 到运营商网络，再到服务器所在网络）时，<strong>IP 地址不变</strong>（始终是源 IP 和目的 IP），但<strong>MAC 地址会逐跳更新</strong>：</p>
 <ul>
 <li>客户端→路由器 1：MAC 目的地址是路由器 1 的 MAC；</li>
 <li>路由器 1→路由器 2：MAC 目的地址是路由器 2 的 MAC；</li>
-<li>最后一跳路由器→服务器：MAC 目的地址是服务器的 MAC。<br>这是因为 MAC 地址仅在局域网内有效，而 IP 地址负责跨网络定位最终目标。</li>
+<li>最后一跳路由器→服务器：MAC 目的地址是服务器的 MAC。<br>
+这是因为 MAC 地址仅在局域网内有效，而 IP 地址负责跨网络定位最终目标。</li>
 </ul>
-<h3 id="四、总结：发送报文的核心逻辑"><a href="#四、总结：发送报文的核心逻辑" class="headerlink" title="四、总结：发送报文的核心逻辑"></a><strong>四、总结：发送报文的核心逻辑</strong></h3><ol>
+<h3 id="四、总结：发送报文的核心逻辑"><strong>四、总结：发送报文的核心逻辑</strong></h3>
+<ol>
 <li><strong>封装</strong>：每层添加头部信息，从应用层的 “纯数据” 逐步包装为物理层的 “信号”；</li>
 <li><strong>地址定位</strong>：IP 地址确定 “终点”，MAC 地址确定 “当前跳的下一站”；</li>
-<li><strong>分工协作</strong>：应用层处理用户需求，传输层确保可靠性，网络层负责路由，数据链路层负责局域网传输，物理层负责信号转换。<br>接收端收到报文后，会从物理层到应用层逐层 “解封装”（剥离头部），最终将数据交给目标应用程序（如服务器的 HTTP 服务）</li>
+<li><strong>分工协作</strong>：应用层处理用户需求，传输层确保可靠性，网络层负责路由，数据链路层负责局域网传输，物理层负责信号转换。<br>
+接收端收到报文后，会从物理层到应用层逐层 “解封装”（剥离头部），最终将数据交给目标应用程序（如服务器的 HTTP 服务）</li>
 </ol>
 
                 

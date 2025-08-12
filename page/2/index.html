@@ -227,39 +227,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025-06-18/7772fb057490/" target="_self">
-          DM模块的向上抽象：DataItem
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-18/7772fb057490/" target="_self">
-        <div>
-          DataItem是DM层向上层提供的数据抽象。上层模块通过地址向DM请求到对应的DataItem，再获取到其中的数据。 1234567public class DataItemImpl implements DataItem &#123;	private SubArray raw;	private byte[] oldRaw;	private DataManagerImpl dm;	private
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-06-18 17:29" pubdate>
-              2025-06-18
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
         <a href="/2025-06-18/15bb3dd63e5b/" target="_self">
           DM模块的页面索引
         </a>
@@ -533,6 +500,39 @@
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-16/266bf6e8430a/" target="_self">
         <div>
           索引管理器位MYDB提供了基于B+树的聚簇索引。目前MYDB只支持基于索引查找数据，不支持全表扫描。IM直接依赖于DM，而没有基于VM。索引的数据会被直接插入数据库文件中，不需要经过版本管理。 二叉树索引二叉树由多个节点Node组成，每个Node都存储在一条DataItem中。结构如下： 12[LeadFlag][KeyNumber][SiblingUid][Son0][Key0][Son1][K
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-06-16 15:50" pubdate>
+              2025-06-16
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025-06-16/8f679726d275/" target="_self">
+          数据管理
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-16/8f679726d275/" target="_self">
+        <div>
+          DM的实现DataManager是DM层直接对外提供方法的类，也同时实现DataItem对象的缓存。DataItem存储的key是由页号和页内偏移组成的一个8字节无符号整数，页号和偏移各占4字节。getForCache() 方法只需要从 key 中解析出页号，从pageCache中获取到页面，再根据偏移，解析出DataItem即可： 12345678@Overrideprotected DataI
         </div>
       </a>
 

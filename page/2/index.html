@@ -227,6 +227,67 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2025-06-18/7772fb057490/" target="_self">
+          DM模块的向上抽象：DataItem
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-18/7772fb057490/" target="_self">
+        <div>
+          DataItem是DM层向上层提供的数据抽象。上层模块通过地址向DM请求到对应的DataItem，再获取到其中的数据。 1234567public class DataItemImpl implements DataItem &#123;	private SubArray raw;	private byte[] oldRaw;	private DataManagerImpl dm;	private
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-06-18 17:29" pubdate>
+              2025-06-18
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2025-06-18/15bb3dd63e5b/" target="_self">
           DM模块的页面索引
         </a>
@@ -235,7 +296,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-18/15bb3dd63e5b/" target="_self">
         <div>
-          页面索引PageIndex缓存了每一个数据页的空闲空间，用于在上层模块进行插入操作时，能快速找到一个合适空间的页面，无需从磁盘或缓存中检查每一个页面信息。MYDB用一个比较粗略的算法实现了页面索引，将每一页的空间划分成了40个区间。在数据库启动时，会遍历所有的页面信息，获取页面的空闲空间安排到这40个区间中。使用insert请求一个页时，会先将所需的空间向上取整，映射到某一个区间，随后取出这个空间
+          页面索引PageIndex缓存了每一个数据页的空闲空间，用于在上层模块进行插入操作时，能快速找到一个合适空间的页面，无需从磁盘或缓存中检查每一个页面信息。 MYDB用一个比较粗略的算法实现了页面索引，将每一页的空间划分成了40个区间。在数据库启动时，会遍历所有的页面信息，获取页面的空闲空间安排到这40个区间中。使用insert请求一个页时，会先将所需的空间向上取整，映射到某一个区间，随后取出这个空
         </div>
       </a>
 
@@ -248,6 +309,34 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -268,7 +357,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/48a8550475e1/" target="_self">
         <div>
-          对于[[日志恢复策略]]中提及的两种多线程下的数据库恢复问题，除了像MYDB一样对数据库操作进行限制，还可以对日志进行增强设计和额外的并发控制来解决问题。第一类问题是事务T1的更新依赖于事务T2，但T2因未提交需要回滚，而已提交的T1被持久化处理，导致T1依赖的数据源失效。这被称为级联提交异常或脏读提交冲突。违反了事务的隔离性原则。第二类问题是事务T1与T2并发更新同一数据项，而T2的更新覆盖了T
+          对于[[日志恢复策略]]中提及的两种多线程下的数据库恢复问题，除了像MYDB一样对数据库操作进行限制，还可以对日志进行增强设计和额外的并发控制来解决问题。 第一类问题是事务T1的更新依赖于事务T2，但T2因未提交需要回滚，而已提交的T1被持久化处理，导致T1依赖的数据源失效。这被称为级联提交异常或脏读提交冲突。违反了事务的隔离性原则。 第二类问题是事务T1与T2并发更新同一数据项，而T2的更新覆盖
         </div>
       </a>
 
@@ -281,6 +370,34 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -301,7 +418,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/f97fb2a2d350/" target="_self">
         <div>
-          恢复策略来自NYADB2的恢复策略。DM为上层模块提供了两种操作，分别是插入新数据（I操作）和更新现有数据（U操作），而没有删除数据（在版本管理时再作解释）。DM的日志策略可以用一句话概括：在进行 I 和 U 操作之前，必须先进行对应的日志操作，确保日志被写入磁盘后，才进行数据操作。这一日志策略使DM对数据操作的磁盘同步能够更加随意，日志在数据操作前就到达了 磁盘，那么即使该数据操作没有及时同步到
+          恢复策略来自NYADB2的恢复策略。DM为上层模块提供了两种操作，分别是插入新数据（I操作）和更新现有数据（U操作），而没有删除数据（在版本管理时再作解释）。 DM的日志策略可以用一句话概括： 在进行 I 和 U 操作之前，必须先进行对应的日志操作，确保日志被写入磁盘后，才进行数据操作。 这一日志策略使DM对数据操作的磁盘同步能够更加随意，日志在数据操作前就到达了 磁盘，那么即使该数据操作没有及时
         </div>
       </a>
 
@@ -314,6 +431,34 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -334,7 +479,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/c1dd335ff70e/" target="_self">
         <div>
-          MYDB以日志文件为基础提供了崩溃后的数据恢复功能。DM层在每次对底层数据进行操作后，都会记录一条日志到磁盘上，当崩溃重启时，可以根据日志内容恢复数据文件，保证一致性。 日志读写日志的二进制文件按照如下格式排布： 1[XChecksum][Log1][Log2][Log3]...[LogN][BadTail] 其中XChecksum是一个4字节int整数，是对后续所有日志计算得出的校验和。Log1
+          MYDB以日志文件为基础提供了崩溃后的数据恢复功能。DM层在每次对底层数据进行操作后，都会记录一条日志到磁盘上，当崩溃重启时，可以根据日志内容恢复数据文件，保证一致性。 日志读写 日志的二进制文件按照如下格式排布： 1[XChecksum][Log1][Log2][Log3]...[LogN][BadTail] 其中XChecksum是一个4字节int整数，是对后续所有日志计算得出的校验和。Log
         </div>
       </a>
 
@@ -347,6 +492,34 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -367,7 +540,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/4e6ee98919ea/" target="_self">
         <div>
-          数据管理(Data Manager)将文件系统抽象成页面类，每次对文件系统的读写都以页面为单位，从文件系统读入的数据也是以页面为单位进行缓存。 页面缓存MYDB参考大部分数据库的设计将默认数据页大小定为8K，如果想要提升向数据库写入大量数据时的性能，可以适当增大该值。本模块需要对页面进行缓存，因此使用自行设计的缓存框架。该页面是存储在内存中的，与已经持久化存储在磁盘的抽象页有区别： 1234567
+          数据管理(Data Manager)将文件系统抽象成页面类，每次对文件系统的读写都以页面为单位，从文件系统读入的数据也是以页面为单位进行缓存。 页面缓存 MYDB参考大部分数据库的设计将默认数据页大小定为8K，如果想要提升向数据库写入大量数据时的性能，可以适当增大该值。本模块需要对页面进行缓存，因此使用自行设计的缓存框架。该页面是存储在内存中的，与已经持久化存储在磁盘的抽象页有区别： 123456
         </div>
       </a>
 
@@ -380,6 +553,34 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -414,6 +615,34 @@
           </div>
         
         
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
         
       </div>
     </article>
@@ -433,7 +662,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-17/60e1c630d6ff/" target="_self">
         <div>
-          由于数据管理(Data Manager)中的分野管理和数据项(DataItem)管理都设计缓存，因此需要设计一个更通用的缓存框架。这里采用引用计数缓存，而非LRU策略缓存。这里首先从缓存的接口设计说起，如果使用 LRU 缓存，那么只需要设计一个 get(key) 接口即可，释放缓存可以在缓存满了之后自动完成。设想这样一个场景：某个时刻缓存满了，缓存驱逐了一个资源，这时上层模块想要将某个资源强制刷回
+          由于数据管理(Data Manager)中的分野管理和数据项(DataItem)管理都设计缓存，因此需要设计一个更通用的缓存框架。这里采用引用计数缓存，而非LRU策略缓存。 这里首先从缓存的接口设计说起，如果使用 LRU 缓存，那么只需要设计一个 get(key) 接口即可，释放缓存可以在缓存满了之后自动完成。 设想这样一个场景：某个时刻缓存满了，缓存驱逐了一个资源，这时上层模块想要将某个资源强制
         </div>
       </a>
 
@@ -446,6 +675,34 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -466,7 +723,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-16/84e514291989/" target="_self">
         <div>
-          此处的字段与表管理是指管理表和字段的数据结构，例如表名、表字段信息、字段索引等，不是管理各个条目中不同字段的数值信息。由于TBM依赖于VM，单个字段信息和表信息都直接保存在了Entry中。字段的二进制表示如下： 1[FieldName][TypeName][IndexUid] 三部分内容存储的都是字节形式的字符串。这里额外规定字符串的存储方式以明确存储边界： 1[StringLength][Str
+          此处的字段与表管理是指管理表和字段的数据结构，例如表名、表字段信息、字段索引等，不是管理各个条目中不同字段的数值信息。 由于TBM依赖于VM，单个字段信息和表信息都直接保存在了Entry中。 字段的二进制表示如下： 1[FieldName][TypeName][IndexUid] 三部分内容存储的都是字节形式的字符串。这里额外规定字符串的存储方式以明确存储边界： 1[StringLength][S
         </div>
       </a>
 
@@ -479,6 +736,34 @@
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -499,7 +784,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-16/266bf6e8430a/" target="_self">
         <div>
-          索引管理器位MYDB提供了基于B+树的聚簇索引。目前MYDB只支持基于索引查找数据，不支持全表扫描。IM直接依赖于DM，而没有基于VM。索引的数据会被直接插入数据库文件中，不需要经过版本管理。 二叉树索引二叉树由多个节点Node组成，每个Node都存储在一条DataItem中。结构如下： 12[LeadFlag][KeyNumber][SiblingUid][Son0][Key0][Son1][K
+          索引管理器位MYDB提供了基于B+树的聚簇索引。目前MYDB只支持基于索引查找数据，不支持全表扫描。IM直接依赖于DM，而没有基于VM。索引的数据会被直接插入数据库文件中，不需要经过版本管理。 二叉树索引 二叉树由多个节点Node组成，每个Node都存储在一条DataItem中。结构如下： 12[LeadFlag][KeyNumber][SiblingUid][Son0][Key0][Son1][
         </div>
       </a>
 
@@ -513,38 +798,33 @@
           </div>
         
         
-        
-      </div>
-    </article>
-  </div>
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
 
-  <div class="row mx-auto index-card">
+<span class="category-chains">
+  
+  
     
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
     
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025-06-16/8f679726d275/" target="_self">
-          数据管理
-        </a>
-      </h2>
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
 
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025-06-16/8f679726d275/" target="_self">
-        <div>
-          DM的实现DataManager是DM层直接对外提供方法的类，也同时实现DataItem对象的缓存。DataItem存储的key是由页号和页内偏移组成的一个8字节无符号整数，页号和偏移各占4字节。getForCache() 方法只需要从 key 中解析出页号，从pageCache中获取到页面，再根据偏移，解析出DataItem即可： 12345678@Overrideprotected DataI
-        </div>
-      </a>
+  
 
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-06-16 15:50" pubdate>
-              2025-06-16
-            </time>
+      </span>
+    
+  
+</span>
+
           </div>
-        
         
         
       </div>

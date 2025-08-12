@@ -19,15 +19,15 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="页面索引PageIndex缓存了每一个数据页的空闲空间，用于在上层模块进行插入操作时，能快速找到一个合适空间的页面，无需从磁盘或缓存中检查每一个页面信息。MYDB用一个比较粗略的算法实现了页面索引，将每一页的空间划分成了40个区间。在数据库启动时，会遍历所有的页面信息，获取页面的空闲空间安排到这40个区间中。使用insert请求一个页时，会先将所需的空间向上取整，映射到某一个区间，随后取出这个空间">
+    <meta name="description" content="页面索引PageIndex缓存了每一个数据页的空闲空间，用于在上层模块进行插入操作时，能快速找到一个合适空间的页面，无需从磁盘或缓存中检查每一个页面信息。 MYDB用一个比较粗略的算法实现了页面索引，将每一页的空间划分成了40个区间。在数据库启动时，会遍历所有的页面信息，获取页面的空闲空间安排到这40个区间中。使用insert请求一个页时，会先将所需的空间向上取整，映射到某一个区间，随后取出这个空">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DM模块的页面索引">
 <meta property="og:url" content="http://example.com/2025-06-18/15bb3dd63e5b/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="页面索引PageIndex缓存了每一个数据页的空闲空间，用于在上层模块进行插入操作时，能快速找到一个合适空间的页面，无需从磁盘或缓存中检查每一个页面信息。MYDB用一个比较粗略的算法实现了页面索引，将每一页的空间划分成了40个区间。在数据库启动时，会遍历所有的页面信息，获取页面的空闲空间安排到这40个区间中。使用insert请求一个页时，会先将所需的空间向上取整，映射到某一个区间，随后取出这个空间">
+<meta property="og:description" content="页面索引PageIndex缓存了每一个数据页的空闲空间，用于在上层模块进行插入操作时，能快速找到一个合适空间的页面，无需从磁盘或缓存中检查每一个页面信息。 MYDB用一个比较粗略的算法实现了页面索引，将每一页的空间划分成了40个区间。在数据库启动时，会遍历所有的页面信息，获取页面的空闲空间安排到这40个区间中。使用insert请求一个页时，会先将所需的空间向上取整，映射到某一个区间，随后取出这个空">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-06-18T09:03:54.000Z">
-<meta property="article:modified_time" content="2025-08-11T09:19:52.000Z">
+<meta property="article:modified_time" content="2025-08-12T01:08:50.000Z">
 <meta property="article:author" content="OrangeFruitTea">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -275,11 +275,14 @@
             
               <div class="markdown-body">
                 
-                <p>页面索引<code>PageIndex</code>缓存了每一个数据页的空闲空间，用于在上层模块进行插入操作时，能快速找到一个合适空间的页面，无需从磁盘或缓存中检查每一个页面信息。<br>MYDB用一个比较粗略的算法实现了页面索引，将每一页的空间划分成了40个区间。在数据库启动时，会遍历所有的页面信息，获取页面的空闲空间安排到这40个区间中。使用<code>insert</code>请求一个页时，会先将所需的空间向上取整，映射到某一个区间，随后取出这个空间的任何一页，都可以满足需求。<br>页面索引的实现方式是一个List类型的数组。</p>
+                <p>页面索引<code>PageIndex</code>缓存了每一个数据页的空闲空间，用于在上层模块进行插入操作时，能快速找到一个合适空间的页面，无需从磁盘或缓存中检查每一个页面信息。<br>
+MYDB用一个比较粗略的算法实现了页面索引，将每一页的空间划分成了40个区间。在数据库启动时，会遍历所有的页面信息，获取页面的空闲空间安排到这40个区间中。使用<code>insert</code>请求一个页时，会先将所需的空间向上取整，映射到某一个区间，随后取出这个空间的任何一页，都可以满足需求。<br>
+页面索引的实现方式是一个List类型的数组。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PageIndex</span> &#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">INNTERVALS_NO</span> <span class="hljs-operator">=</span> <span class="hljs-number">40</span>;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">THRESHOLD</span> <span class="hljs-operator">=</span> PageCache.PAGE_SIZE / INTERVALS_NO;<br><br>	<span class="hljs-keyword">private</span> List&lt;PageInfo&gt;[] lists;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>从页面索引中获取页面的方式则是通过页面大小算出区间号取出：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> PageInfo <span class="hljs-title function_">select</span><span class="hljs-params">(<span class="hljs-type">int</span> spaceSize)</span> &#123;<br>	<span class="hljs-type">int</span> <span class="hljs-variable">number</span> <span class="hljs-operator">=</span> spaceSize / THRESHOLD;<br>	<span class="hljs-keyword">if</span> (number &lt; INTERVALS_NO) number++;<br>	<span class="hljs-keyword">while</span> (number &lt;= INTERVALS_NO) &#123;<br>		<span class="hljs-keyword">if</span> (lists[number].size() == <span class="hljs-number">0</span>) &#123;<br>			number++;<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>		<span class="hljs-keyword">return</span> lists[number].remove(<span class="hljs-number">0</span>);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>返回的<code>PageInfo</code>中包含页号和空闲空间大小等信息。<br>被选择的页面会直接从页面索引中移除，因此同一个页面不允许并发写入。在上层模块使用完这个页面后，需要将其重新插入页面索引中：</p>
+<p>返回的<code>PageInfo</code>中包含页号和空闲空间大小等信息。<br>
+被选择的页面会直接从页面索引中移除，因此同一个页面不允许并发写入。在上层模块使用完这个页面后，需要将其重新插入页面索引中：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">(<span class="hljs-type">int</span> pgno, <span class="hljs-type">int</span> freeSpace)</span> &#123;<br>	<span class="hljs-type">int</span> <span class="hljs-variable">number</span> <span class="hljs-operator">=</span> freeSpace / THRESHOLD;<br>	lists[number].add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PageInfo</span>(pgno, freeSpace));<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>在数据管理器被创建时，需要获取所有页面并填充页面索引：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 初始化pageIndex</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">fillPageIndex</span><span class="hljs-params">()</span> &#123;<br>	<span class="hljs-type">int</span> <span class="hljs-variable">pageNumber</span> <span class="hljs-operator">=</span> pc.getPageNumber();<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>; i &lt;= pageNumber; i++) &#123;<br>		<span class="hljs-type">Page</span> <span class="hljs-variable">pg</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			pg = pg.getPage(i);<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			Panic.panic(e);<br>		&#125;<br>		pIndex.add(pg.getPageNumber(), PageX.getFreeSpace(pg));<br>		pg.release();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -291,6 +294,34 @@
             <hr/>
             <div>
               <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
   
   
 </div>
@@ -320,7 +351,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年8月11日</div>
+          <div>2025年8月12日</div>
         </div>
       
       

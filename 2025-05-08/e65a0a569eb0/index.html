@@ -19,15 +19,15 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Java中的异常主要分为两大类，受检查异常（Checked Exceptions） 和 非受检查异常（Unchecked Exceptions），二者都继承自java.lang.Throwable。 受检查异常指在编译时必须被显式处理的异常。通常由于外部环境或者运行时条件导致，例如文件找不到、网络连接失败等。受检查异常必须在方法的签名中声明（使用throws关键字），或者在方法内部用try-cat">
+    <meta name="description" content="Java中的异常主要分为两大类，受检查异常（Checked Exceptions） 和 非受检查异常（Unchecked Exceptions），二者都继承自java.lang.Throwable。 受检查异常 指在编译时必须被显式处理的异常。通常由于外部环境或者运行时条件导致，例如文件找不到、网络连接失败等。 受检查异常必须在方法的签名中声明（使用throws关键字），或者在方法内部用try-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 异常">
 <meta property="og:url" content="http://example.com/2025-05-08/e65a0a569eb0/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="Java中的异常主要分为两大类，受检查异常（Checked Exceptions） 和 非受检查异常（Unchecked Exceptions），二者都继承自java.lang.Throwable。 受检查异常指在编译时必须被显式处理的异常。通常由于外部环境或者运行时条件导致，例如文件找不到、网络连接失败等。受检查异常必须在方法的签名中声明（使用throws关键字），或者在方法内部用try-cat">
+<meta property="og:description" content="Java中的异常主要分为两大类，受检查异常（Checked Exceptions） 和 非受检查异常（Unchecked Exceptions），二者都继承自java.lang.Throwable。 受检查异常 指在编译时必须被显式处理的异常。通常由于外部环境或者运行时条件导致，例如文件找不到、网络连接失败等。 受检查异常必须在方法的签名中声明（使用throws关键字），或者在方法内部用try-c">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-08T09:14:02.000Z">
-<meta property="article:modified_time" content="2025-08-11T09:56:32.000Z">
+<meta property="article:modified_time" content="2025-08-12T01:06:10.000Z">
 <meta property="article:author" content="OrangeFruitTea">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -276,14 +276,20 @@
               <div class="markdown-body">
                 
                 <p>Java中的异常主要分为两大类，<strong>受检查异常（Checked Exceptions）</strong> 和 <strong>非受检查异常（Unchecked Exceptions）</strong>，二者都继承自<code>java.lang.Throwable</code>。</p>
-<h1 id="受检查异常"><a href="#受检查异常" class="headerlink" title="受检查异常"></a>受检查异常</h1><p>指在编译时必须被显式处理的异常。通常由于外部环境或者运行时条件导致，例如文件找不到、网络连接失败等。<br>受检查异常必须在方法的签名中声明（使用<code>throws</code>关键字），或者在方法内部用try-catch捕获。如果没有处理这些异常，编译器会报错。</p>
-<h2 id="常见的受检查异常"><a href="#常见的受检查异常" class="headerlink" title="常见的受检查异常"></a>常见的受检查异常</h2><ul>
+<h1>受检查异常</h1>
+<p>指在编译时必须被显式处理的异常。通常由于外部环境或者运行时条件导致，例如文件找不到、网络连接失败等。<br>
+受检查异常必须在方法的签名中声明（使用<code>throws</code>关键字），或者在方法内部用try-catch捕获。如果没有处理这些异常，编译器会报错。</p>
+<h2 id="常见的受检查异常">常见的受检查异常</h2>
+<ul>
 <li><code>IOException</code>（输入输出异常）</li>
 <li><code>SQLException</code>（数据库操作异常）</li>
 <li><code>ClassNotFoundException</code>（类找不到异常）</li>
 </ul>
-<h1 id="非受检查异常"><a href="#非受检查异常" class="headerlink" title="非受检查异常"></a>非受检查异常</h1><p>指在编译时不需要显式处理的异常。通常由于程序逻辑错误导致，例如空指针、数组越界等。<br>编译器不会强制要求处理这些异常，但是可以通过<code>try-catch</code>捕获处理。</p>
-<h2 id="常见的非受检查异常"><a href="#常见的非受检查异常" class="headerlink" title="常见的非受检查异常"></a>常见的非受检查异常</h2><ul>
+<h1>非受检查异常</h1>
+<p>指在编译时不需要显式处理的异常。通常由于程序逻辑错误导致，例如空指针、数组越界等。<br>
+编译器不会强制要求处理这些异常，但是可以通过<code>try-catch</code>捕获处理。</p>
+<h2 id="常见的非受检查异常">常见的非受检查异常</h2>
+<ul>
 <li><code>NullPointerException</code>（空指针异常）</li>
 <li><code>ArrayIndexOutOfBoundsException</code>（数组越界异常）</li>
 <li><code>ArithmeticException</code>（算术异常，例如除以零）</li>
@@ -295,6 +301,34 @@
             <hr/>
             <div>
               <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="category-chain-item">编程语言</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/" class="category-chain-item">Java</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
   
   
 </div>
@@ -324,7 +358,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年8月11日</div>
+          <div>2025年8月12日</div>
         </div>
       
       

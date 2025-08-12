@@ -19,15 +19,15 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Java 8之前，在实现接口或继承类时，需要显式声明类名、方法名等，代码较为冗长，缺乏简洁的函数式接口支持。因此Java通过匿名内部类与Lambda表达式来解决该问题，即支持函数式编程。除此之外，二者还可用于代码简化、封装局部逻辑，实现事件处理器与回调函数。 函数式编程函数式编程是一种编程范式，它将计算视为数学函数的求值，避免使用可变数据结构与可变状态。Lambda表达式提供了一种简洁的方式来实现">
+    <meta name="description" content="Java 8之前，在实现接口或继承类时，需要显式声明类名、方法名等，代码较为冗长，缺乏简洁的函数式接口支持。因此Java通过匿名内部类与Lambda表达式来解决该问题，即支持函数式编程。除此之外，二者还可用于代码简化、封装局部逻辑，实现事件处理器与回调函数。 函数式编程 函数式编程是一种编程范式，它将计算视为数学函数的求值，避免使用可变数据结构与可变状态。 Lambda表达式提供了一种简洁的方式来">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lambda表达式与匿名内部类">
 <meta property="og:url" content="http://example.com/2025-05-09/266bc4f6d12d/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="Java 8之前，在实现接口或继承类时，需要显式声明类名、方法名等，代码较为冗长，缺乏简洁的函数式接口支持。因此Java通过匿名内部类与Lambda表达式来解决该问题，即支持函数式编程。除此之外，二者还可用于代码简化、封装局部逻辑，实现事件处理器与回调函数。 函数式编程函数式编程是一种编程范式，它将计算视为数学函数的求值，避免使用可变数据结构与可变状态。Lambda表达式提供了一种简洁的方式来实现">
+<meta property="og:description" content="Java 8之前，在实现接口或继承类时，需要显式声明类名、方法名等，代码较为冗长，缺乏简洁的函数式接口支持。因此Java通过匿名内部类与Lambda表达式来解决该问题，即支持函数式编程。除此之外，二者还可用于代码简化、封装局部逻辑，实现事件处理器与回调函数。 函数式编程 函数式编程是一种编程范式，它将计算视为数学函数的求值，避免使用可变数据结构与可变状态。 Lambda表达式提供了一种简洁的方式来">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-09T02:42:23.000Z">
-<meta property="article:modified_time" content="2025-08-11T09:56:32.000Z">
+<meta property="article:modified_time" content="2025-08-12T01:06:10.000Z">
 <meta property="article:author" content="OrangeFruitTea">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -276,14 +276,21 @@
               <div class="markdown-body">
                 
                 <p>Java 8之前，在实现接口或继承类时，需要显式声明类名、方法名等，代码较为冗长，缺乏简洁的函数式接口支持。因此Java通过匿名内部类与Lambda表达式来解决该问题，即支持<strong>函数式编程</strong>。除此之外，二者还可用于代码简化、封装局部逻辑，实现事件处理器与回调函数。</p>
-<h2 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h2><p>函数式编程是一种编程范式，它将计算视为数学函数的求值，避免使用可变数据结构与可变状态。<br>Lambda表达式提供了一种简洁的方式来实现单方法接口。</p>
+<h2 id="函数式编程">函数式编程</h2>
+<p>函数式编程是一种编程范式，它将计算视为数学函数的求值，避免使用可变数据结构与可变状态。<br>
+Lambda表达式提供了一种简洁的方式来实现单方法接口。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 使用匿名内部类</span><br><span class="hljs-type">Runnable</span> <span class="hljs-variable">runnable1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Runnable</span>() &#123;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>		System.out.println(<span class="hljs-string">&quot;Hello World&quot;</span>);<br>	&#125;<br>&#125;;<br><br><span class="hljs-comment">// 使用lambda表达式</span><br><span class="hljs-type">Runnable</span> <span class="hljs-variable">runaable2</span> <span class="hljs-operator">=</span> () -&gt; System.out.println(<span class="hljs-string">&quot;Hello World&quot;</span>);<br></code></pre></td></tr></table></figure>
-<h2 id="简化代码与局部逻辑封装"><a href="#简化代码与局部逻辑封装" class="headerlink" title="简化代码与局部逻辑封装"></a>简化代码与局部逻辑封装</h2><p>匿名内部类与lambda表达式的主要目标之一就是简化代码，提高可读性，减轻维护难度。<br>lambda表达式能省略类名与方法名直接实现接口的唯一方法，使代码简洁。<br>使用方法引用可以进一步简化lambda表达式，直接引用已有的方法。</p>
+<h2 id="简化代码与局部逻辑封装">简化代码与局部逻辑封装</h2>
+<p>匿名内部类与lambda表达式的主要目标之一就是简化代码，提高可读性，减轻维护难度。<br>
+lambda表达式能省略类名与方法名直接实现接口的唯一方法，使代码简洁。<br>
+使用方法引用可以进一步简化lambda表达式，直接引用已有的方法。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 匿名内部类</span><br>Comparator&lt;String&gt; comparator1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Comparator</span>&lt;String&gt;() &#123;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">compare</span><span class="hljs-params">(String s1, String s2)</span> &#123;<br>		<span class="hljs-keyword">return</span> s1.length() - s2.length();<br>	&#125;<br>&#125;;<br><br><span class="hljs-comment">// lambda表达式</span><br>COmparator&lt;String&gt; comparator2 = (s1, s2) -&gt; s1.length() - s2.length();<br><br><span class="hljs-comment">// 方法引用</span><br>Comparator&lt;String&gt; comparator3 = Comparator.comparingInt(String::length);<br></code></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">process</span><span class="hljs-params">()</span> &#123;<br>	<span class="hljs-type">int</span> <span class="hljs-variable">output</span> <span class="hljs-operator">=</span> <span class="hljs-number">42</span>;<br>	<span class="hljs-comment">// 使用匿名内部类封装逻辑</span><br>	<span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Runnable</span>() &#123;<br>		<span class="hljs-meta">@Override</span><br>		<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>			System.out.println(<span class="hljs-string">&quot;Output:&quot;</span> + output);<br>		&#125;<br>	&#125;).start();<br><br>	<span class="hljs-comment">// 使用lambda表达式</span><br>	<span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(()-&gt;System.out.println(<span class="hljs-string">&quot;Output&quot;</span> + output)).start();<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2 id="事件回调"><a href="#事件回调" class="headerlink" title="事件回调"></a>事件回调</h2><p>lambda表达式与匿名内部类也常用于事件处理与异步操作中的回调函数。</p>
+<h2 id="事件回调">事件回调</h2>
+<p>lambda表达式与匿名内部类也常用于事件处理与异步操作中的回调函数。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 匿名内部类</span><br>button.addActionListener(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ActionLisener</span>() &#123;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">actionPerformed</span><span class="hljs-params">(ActionEvent e)</span> &#123;<br>		System.out.println(<span class="hljs-string">&quot;Get Clicked&quot;</span>);<br>	&#125;<br>&#125;);<br><br><span class="hljs-comment">// lambda表达式</span><br>button.addActionListener(e -&gt; System.out.println(<span class="hljs-string">&quot;Get Clicked&quot;</span>));<br></code></pre></td></tr></table></figure>
-<h2 id="封装多个函数"><a href="#封装多个函数" class="headerlink" title="封装多个函数"></a>封装多个函数</h2><p>显然内部类与lambda表达式都支持包裹多语句，但在实现多个接口时，匿名内部类会更加好，因其可以实现接口或继承类且可以包含多个方法；而lambda表达式本就用于表示一个方法的实现逻辑。</p>
+<h2 id="封装多个函数">封装多个函数</h2>
+<p>显然内部类与lambda表达式都支持包裹多语句，但在实现多个接口时，匿名内部类会更加好，因其可以实现接口或继承类且可以包含多个方法；而lambda表达式本就用于表示一个方法的实现逻辑。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 需要实现的接口</span><br><span class="hljs-keyword">interface</span> <span class="hljs-title class_">I_new</span> &#123;<br>	<span class="hljs-keyword">void</span> <span class="hljs-title function_">method1</span><span class="hljs-params">()</span>;<br>	<span class="hljs-keyword">void</span> <span class="hljs-title function_">method2</span><span class="hljs-params">()</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>使用匿名内部类实现则很简单：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">I_new</span> <span class="hljs-variable">myInterface</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">I_new</span>() &#123;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">method1</span><span class="hljs-params">()</span> &#123; sout(<span class="hljs-string">&quot;Hello&quot;</span>); &#125;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">method2</span><span class="hljs-params">()</span> &#123; sout(<span class="hljs-string">&quot;Hi&quot;</span>); &#125;	<br>&#125;;<br><br>myInterface.method1();<br>myInterface.method2();<br></code></pre></td></tr></table></figure>
@@ -296,6 +303,34 @@
             <hr/>
             <div>
               <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="category-chain-item">编程语言</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/" class="category-chain-item">Java</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
   
   
 </div>
@@ -325,7 +360,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年8月11日</div>
+          <div>2025年8月12日</div>
         </div>
       
       

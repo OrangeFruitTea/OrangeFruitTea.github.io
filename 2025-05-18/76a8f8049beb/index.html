@@ -19,12 +19,12 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Java中的类型转换可分为以下几类：  自动类型转换（隐式转换） 强制类型转换（显式转换） 引用类型转换（详见[[Java 多态与多态的类型转换]]） 装箱与拆箱 字符串与基本数据类型的转换 自定义类型转换（通过构造函数或方法）  自动类型转换 是指在安全情况下，由编译器自动完成的类型转换。这种转换不会丢失数据。 基本数据类型的自动转换 基本数据类型的自动转换遵循小范围到大范围的转换： byte">
+    <meta name="description" content="Java中的类型转换可分为以下几类：  自动类型转换（隐式转换） 强制类型转换（显式转换） 引用类型转换（详见[[Java 多态与多态的类型转换]]） 装箱与拆箱 字符串与基本数据类型的转换 自定义类型转换（通过构造函数或方法）  自动类型转换是指在安全情况下，由编译器自动完成的类型转换。这种转换不会丢失数据。 基本数据类型的自动转换基本数据类型的自动转换遵循小范围到大范围的转换：byte -&amp;g">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 类型转换">
 <meta property="og:url" content="http://example.com/2025-05-18/76a8f8049beb/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="Java中的类型转换可分为以下几类：  自动类型转换（隐式转换） 强制类型转换（显式转换） 引用类型转换（详见[[Java 多态与多态的类型转换]]） 装箱与拆箱 字符串与基本数据类型的转换 自定义类型转换（通过构造函数或方法）  自动类型转换 是指在安全情况下，由编译器自动完成的类型转换。这种转换不会丢失数据。 基本数据类型的自动转换 基本数据类型的自动转换遵循小范围到大范围的转换： byte">
+<meta property="og:description" content="Java中的类型转换可分为以下几类：  自动类型转换（隐式转换） 强制类型转换（显式转换） 引用类型转换（详见[[Java 多态与多态的类型转换]]） 装箱与拆箱 字符串与基本数据类型的转换 自定义类型转换（通过构造函数或方法）  自动类型转换是指在安全情况下，由编译器自动完成的类型转换。这种转换不会丢失数据。 基本数据类型的自动转换基本数据类型的自动转换遵循小范围到大范围的转换：byte -&amp;g">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-18T07:56:11.000Z">
 <meta property="article:modified_time" content="2025-08-11T09:56:32.000Z">
@@ -284,37 +284,21 @@
 <li>字符串与基本数据类型的转换</li>
 <li>自定义类型转换（通过构造函数或方法）</li>
 </ul>
-<h1>自动类型转换</h1>
-<p>是指在安全情况下，由编译器自动完成的类型转换。这种转换不会丢失数据。</p>
-<h2 id="基本数据类型的自动转换">基本数据类型的自动转换</h2>
-<p>基本数据类型的自动转换遵循小范围到大范围的转换：<br>
-<code>byte -&gt; short -&gt; int -&gt; long -&gt; float -&gt; double</code><br>
-<code>1 -&gt; 2 -&gt; 4-&gt; 8 -&gt; 4 -&gt; 8（字节）</code><br>
-由于<code>float</code>是32位的单精度浮点数，而<code>long</code>是64位的整数，因此<code>long -&gt; float</code>的自动转换可能会导致精度损失。<br>
-如果表达式中存在多个数据类型，编译器会先将所有操作数提升到最宽的类型。</p>
+<h1 id="自动类型转换"><a href="#自动类型转换" class="headerlink" title="自动类型转换"></a>自动类型转换</h1><p>是指在安全情况下，由编译器自动完成的类型转换。这种转换不会丢失数据。</p>
+<h2 id="基本数据类型的自动转换"><a href="#基本数据类型的自动转换" class="headerlink" title="基本数据类型的自动转换"></a>基本数据类型的自动转换</h2><p>基本数据类型的自动转换遵循小范围到大范围的转换：<br><code>byte -&gt; short -&gt; int -&gt; long -&gt; float -&gt; double</code><br><code>1 -&gt; 2 -&gt; 4-&gt; 8 -&gt; 4 -&gt; 8（字节）</code><br>由于<code>float</code>是32位的单精度浮点数，而<code>long</code>是64位的整数，因此<code>long -&gt; float</code>的自动转换可能会导致精度损失。<br>如果表达式中存在多个数据类型，编译器会先将所有操作数提升到最宽的类型。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">byte</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> <span class="hljs-number">10</span>;<br><span class="hljs-type">short</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-number">20</span>;<br><span class="hljs-type">int</span> <span class="hljs-variable">res</span> <span class="hljs-operator">=</span> b + s; <span class="hljs-comment">// b与s都被提升为int</span><br></code></pre></td></tr></table></figure>
 <p>在调用方法时，如果参数类型与方法签名不完全匹配，但可以自动转换时，编译器会自动转换。</p>
-<h2 id="引用类型的自动转换">引用类型的自动转换</h2>
-<p>引用类型的自动转换主要发生在<a href="Java%20%E5%A4%9A%E6%80%81%E4%B8%8E%E5%A4%9A%E6%80%81%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2#%E5%90%91%E4%B8%8A%E8%BD%AC%E5%9E%8B">向上转型</a>中，即将子类对象赋值给父类类型的引用变量。</p>
-<h1>强制类型转换</h1>
-<p>是指在可能丢失数据的情况下，由程序员显式进行的类型转换。这种转换需要强制类型转换运算符。<br>
-基本数据类型之间的强制转换可能导致数据丢失，例如<code>double</code>、<code>float</code>转化为<code>long</code>、<code>int</code>时会舍去小数部分；强制将<code>long</code>转换为<code>int</code>时会仅截取低N位，丢失高位数据。<br>
-引用类型的转换主要用于<a href="Java%20%E5%A4%9A%E6%80%81%E4%B8%8E%E5%A4%9A%E6%80%81%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2#%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B">向下转型</a>中，即将父类类型的引用变量强制转换为子类类型。</p>
-<h1>装箱与拆箱</h1>
-<p>是Java 5引入的特性，用于简化代码，自动在基本数据类型与对应的包装类之间进行转换。<br>
-装箱是指将基本数据类型转换为包装类，拆箱是指将包装类自动转换为对应的基本数据类型：</p>
+<h2 id="引用类型的自动转换"><a href="#引用类型的自动转换" class="headerlink" title="引用类型的自动转换"></a>引用类型的自动转换</h2><p>引用类型的自动转换主要发生在<a href="Java%20%E5%A4%9A%E6%80%81%E4%B8%8E%E5%A4%9A%E6%80%81%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2#%E5%90%91%E4%B8%8A%E8%BD%AC%E5%9E%8B">向上转型</a>中，即将子类对象赋值给父类类型的引用变量。</p>
+<h1 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h1><p>是指在可能丢失数据的情况下，由程序员显式进行的类型转换。这种转换需要强制类型转换运算符。<br>基本数据类型之间的强制转换可能导致数据丢失，例如<code>double</code>、<code>float</code>转化为<code>long</code>、<code>int</code>时会舍去小数部分；强制将<code>long</code>转换为<code>int</code>时会仅截取低N位，丢失高位数据。<br>引用类型的转换主要用于<a href="Java%20%E5%A4%9A%E6%80%81%E4%B8%8E%E5%A4%9A%E6%80%81%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2#%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B">向下转型</a>中，即将父类类型的引用变量强制转换为子类类型。</p>
+<h1 id="装箱与拆箱"><a href="#装箱与拆箱" class="headerlink" title="装箱与拆箱"></a>装箱与拆箱</h1><p>是Java 5引入的特性，用于简化代码，自动在基本数据类型与对应的包装类之间进行转换。<br>装箱是指将基本数据类型转换为包装类，拆箱是指将包装类自动转换为对应的基本数据类型：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Integer</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">10</span>; <span class="hljs-comment">// 自动将 int 转换为 Integer</span><br><span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> i; <span class="hljs-comment">// 自动将 Integer 转换为 int</span><br></code></pre></td></tr></table></figure>
-<p>装箱与拆箱操作设计对象的创建和方法调用，会导致额外的性能开销。<br>
-如果包装类对象为空，拆箱时会出现<code>NullPointerException</code>.</p>
-<h1>字符串与基本数据类型的转换</h1>
-<p>Java提供了多种在字符串与基本数据类型之间转换的方法，例如使用包装里的<code>parseInt</code>、<code>parseFloat</code>等静态方法，基本数据类型转字符串则可以使用<code>String.valueOf</code>或字符串连接操作：</p>
+<p>装箱与拆箱操作设计对象的创建和方法调用，会导致额外的性能开销。<br>如果包装类对象为空，拆箱时会出现<code>NullPointerException</code>.</p>
+<h1 id="字符串与基本数据类型的转换"><a href="#字符串与基本数据类型的转换" class="headerlink" title="字符串与基本数据类型的转换"></a>字符串与基本数据类型的转换</h1><p>Java提供了多种在字符串与基本数据类型之间转换的方法，例如使用包装里的<code>parseInt</code>、<code>parseFloat</code>等静态方法，基本数据类型转字符串则可以使用<code>String.valueOf</code>或字符串连接操作：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">str</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;123&quot;</span>;<br><span class="hljs-type">int</span> <span class="hljs-variable">num</span> <span class="hljs-operator">=</span> Integer.parseInt(str);<br><span class="hljs-type">double</span> <span class="hljs-variable">d</span> <span class="hljs-operator">=</span> Double.parseDouble(str);<br><br><span class="hljs-type">String</span> <span class="hljs-variable">test</span> <span class="hljs-operator">=</span> String.valueOf(num);<br><span class="hljs-type">String</span> <span class="hljs-variable">newStr</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;&quot;</span> + num;<br></code></pre></td></tr></table></figure>
 <p>当字符串格式不正确时，<code>parse</code>函数会抛出<code>NumberFormatException</code>。</p>
-<h1>自定义类型转换</h1>
-<p>可通过构造函数或静态工厂方法实现自定义类型转换：</p>
+<h1 id="自定义类型转换"><a href="#自定义类型转换" class="headerlink" title="自定义类型转换"></a>自定义类型转换</h1><p>可通过构造函数或静态工厂方法实现自定义类型转换：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;<br>	<span class="hljs-type">int</span> x, y;<br>	Point(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y) &#123; <span class="hljs-built_in">this</span>.x = x; <span class="hljs-built_in">this</span>.y = y; &#125;<br>	<br>	Point(String s) &#123;<br>		String[] parts = s.split(<span class="hljs-string">&quot;,&quot;</span>);<br>		<span class="hljs-built_in">this</span>.x = Integer.parseInt(parts[<span class="hljs-number">0</span>]);<br>		<span class="hljs-built_in">this</span>.y = Integer.parseInt(parts[<span class="hljs-number">1</span>]);<br>	&#125;<br><br>	<span class="hljs-keyword">static</span> Point <span class="hljs-title function_">fromString</span><span class="hljs-params">(String s)</span> &#123; <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Point</span>(s); &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h1>相关笔记</h1>
-<p>[[Java 多态与多态的类型转换]]</p>
+<h1 id="相关笔记"><a href="#相关笔记" class="headerlink" title="相关笔记"></a>相关笔记</h1><p>[[Java 多态与多态的类型转换]]</p>
 
                 
               </div>

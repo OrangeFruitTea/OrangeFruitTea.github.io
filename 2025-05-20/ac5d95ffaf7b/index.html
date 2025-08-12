@@ -19,12 +19,12 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="当一个实体的属性数据被分散到多个数据表中时，就需要通过join整合不同表的数据来找到需要的数据。 join 关系数据表中都会又一个属性列设置为主键（primary key）用于唯一标识一体哦啊数据，不会重复，如同每个人的身份证号。最常见的主键就是自增ID，不重复的字符串&#x2F;哈希值也可以设为主键。 我们可以通过主键把两个表中具有相同主键的数据合并为新的行： 1234567select column,">
+    <meta name="description" content="当一个实体的属性数据被分散到多个数据表中时，就需要通过join整合不同表的数据来找到需要的数据。join关系数据表中都会又一个属性列设置为主键（primary key）用于唯一标识一体哦啊数据，不会重复，如同每个人的身份证号。最常见的主键就是自增ID，不重复的字符串&#x2F;哈希值也可以设为主键。我们可以通过主键把两个表中具有相同主键的数据合并为新的行： 1234567select column">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL 多表联合查询">
 <meta property="og:url" content="http://example.com/2025-05-20/ac5d95ffaf7b/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="当一个实体的属性数据被分散到多个数据表中时，就需要通过join整合不同表的数据来找到需要的数据。 join 关系数据表中都会又一个属性列设置为主键（primary key）用于唯一标识一体哦啊数据，不会重复，如同每个人的身份证号。最常见的主键就是自增ID，不重复的字符串&#x2F;哈希值也可以设为主键。 我们可以通过主键把两个表中具有相同主键的数据合并为新的行： 1234567select column,">
+<meta property="og:description" content="当一个实体的属性数据被分散到多个数据表中时，就需要通过join整合不同表的数据来找到需要的数据。join关系数据表中都会又一个属性列设置为主键（primary key）用于唯一标识一体哦啊数据，不会重复，如同每个人的身份证号。最常见的主键就是自增ID，不重复的字符串&#x2F;哈希值也可以设为主键。我们可以通过主键把两个表中具有相同主键的数据合并为新的行： 1234567select column">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-20T03:52:17.000Z">
 <meta property="article:modified_time" content="2025-08-11T09:18:56.000Z">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          299 字
+          300 字
         
       </span>
     
@@ -275,14 +275,9 @@
             
               <div class="markdown-body">
                 
-                <p>当一个实体的属性数据被分散到多个数据表中时，就需要通过<code>join</code>整合不同表的数据来找到需要的数据。<br>
-<strong>join</strong><br>
-关系数据表中都会又一个属性列设置为主键（primary key）用于唯一标识一体哦啊数据，不会重复，如同每个人的身份证号。最常见的主键就是自增ID，不重复的字符串/哈希值也可以设为主键。<br>
-我们可以通过主键把两个表中具有相同主键的数据合并为新的行：</p>
+                <p>当一个实体的属性数据被分散到多个数据表中时，就需要通过<code>join</code>整合不同表的数据来找到需要的数据。<br><strong>join</strong><br>关系数据表中都会又一个属性列设置为主键（primary key）用于唯一标识一体哦啊数据，不会重复，如同每个人的身份证号。最常见的主键就是自增ID，不重复的字符串&#x2F;哈希值也可以设为主键。<br>我们可以通过主键把两个表中具有相同主键的数据合并为新的行：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-keyword">column</span>, another_column, ...<br>	<span class="hljs-keyword">from</span> mytable <span class="hljs-operator">/</span><span class="hljs-operator">/</span> 主表<br>	(<span class="hljs-keyword">inner</span><span class="hljs-operator">/</span><span class="hljs-keyword">left</span><span class="hljs-operator">/</span><span class="hljs-keyword">right</span><span class="hljs-operator">/</span><span class="hljs-keyword">full</span>) <span class="hljs-keyword">join</span> another_table <span class="hljs-operator">/</span><span class="hljs-operator">/</span> 要链接的表<br>	<span class="hljs-keyword">on</span> mytable.id <span class="hljs-operator">=</span> another_table.id<br>	<span class="hljs-keyword">where</span> <span class="hljs-keyword">condition</span>(s)<br>	<span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> <span class="hljs-keyword">column</span>, ... <span class="hljs-keyword">asc</span><span class="hljs-operator">/</span><span class="hljs-keyword">desc</span><br>	limit num_limit <span class="hljs-keyword">offset</span> num_offset;<br></code></pre></td></tr></table></figure>
-<p>通过<code>on</code>条件描述的关联关系里，<code>inner join</code>会取两个表中数据的交集，在交集中进行数据查询。<br>
-<code>inner join</code>只会保留两个表的交集，会产生一定的数据丢失，而<code>left join</code>、<code>right join</code>、<code>full join</code>三个链接方式都会保留不能匹配的行。、<br>
-当<code>tableA join tableB</code>时，<code>left join</code>保留A的所有行，<code>right join</code>保留B的所有行，<code>full join</code>则不管是否匹配，同时保留A与B的所有行，如果某行在另一个表不存在，会用<code>NULL</code>填充数据。</p>
+<p>通过<code>on</code>条件描述的关联关系里，<code>inner join</code>会取两个表中数据的交集，在交集中进行数据查询。<br><code>inner join</code>只会保留两个表的交集，会产生一定的数据丢失，而<code>left join</code>、<code>right join</code>、<code>full join</code>三个链接方式都会保留不能匹配的行。、<br>当<code>tableA join tableB</code>时，<code>left join</code>保留A的所有行，<code>right join</code>保留B的所有行，<code>full join</code>则不管是否匹配，同时保留A与B的所有行，如果某行在另一个表不存在，会用<code>NULL</code>填充数据。</p>
 
                 
               </div>

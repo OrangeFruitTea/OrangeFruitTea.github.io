@@ -235,7 +235,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-05-21/a354aa4b33c4/" target="_self">
         <div>
-          是驱动数据库管理系统进行操作的核心，它封装了数据存储和管理的具体实现细节，用于实现数据的存储、检索、管理和维护等功能。简单来说，存储引擎就是指表的类型以及表在计算机上的存储方式。不同的存储引擎提供不同的存储机制、索引技巧、锁定水平等功能。 存储引擎通常由以下几部分组成：  数据存储模块：负责将数据以特定格式存储在磁盘或内存中。 索引管理模块：用于创建和维护索引，以提高数据检索的效率。 事务管理模块
+          是驱动数据库管理系统进行操作的核心，它封装了数据存储和管理的具体实现细节，用于实现数据的存储、检索、管理和维护等功能。简单来说，存储引擎就是指表的类型以及表在计算机上的存储方式。不同的存储引擎提供不同的存储机制、索引技巧、锁定水平等功能。存储引擎通常由以下几部分组成：  数据存储模块：负责将数据以特定格式存储在磁盘或内存中。 索引管理模块：用于创建和维护索引，以提高数据检索的效率。 事务管理模块：
         </div>
       </a>
 
@@ -334,7 +334,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-05-21/7c6a558230b9/" target="_self">
         <div>
-          使用SQL查询属性名时，实际上都可以用表达式来对指定属性进行一定的计算处理，以下是个例子： 123select speed / 2.0 as half_speed 	from mytable	where abs(position) * 10 &gt; 500; 每种数据库都有自己的一套函数，包含常用的数字、字符串、时间等处理过程。 当进行属性计算时，还可以使用as关键字为表达式结果取别名（如上文的
+          使用SQL查询属性名时，实际上都可以用表达式来对指定属性进行一定的计算处理，以下是个例子： 123select speed / 2.0 as half_speed 	from mytable	where abs(position) * 10 &gt; 500; 每种数据库都有自己的一套函数，包含常用的数字、字符串、时间等处理过程。当进行属性计算时，还可以使用as关键字为表达式结果取别名（如上文的h
         </div>
       </a>
 
@@ -367,7 +367,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-05-21/5d4dc2077e8b/" target="_self">
         <div>
-          null代表没有数据。在编写SQL时需要考虑某个属性列为空的情况，导致编写复杂，所以若无必要，应尽量减少null的使用，减少数据中出现null的情啊坤哥。 常见的方式是为字段设置默认值。但一些数字默认值会让计算平均时出现差错（例如默认值为0的行仍会参与计算，null则不参与运算）。 多表查询有数据差异时必须用null填充，此时可以用is (not) null的限制条件选定某个字段是否为null.
+          null代表没有数据。在编写SQL时需要考虑某个属性列为空的情况，导致编写复杂，所以若无必要，应尽量减少null的使用，减少数据中出现null的情啊坤哥。常见的方式是为字段设置默认值。但一些数字默认值会让计算平均时出现差错（例如默认值为0的行仍会参与计算，null则不参与运算）。多表查询有数据差异时必须用null填充，此时可以用is (not) null的限制条件选定某个字段是否为null.
         </div>
       </a>
 
@@ -400,7 +400,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-05-21/6c7d59766b59/" target="_self">
         <div>
-          范式是指数据表设计的规范，在范式规范下，数据库中每个表存储的重复数据能降到最少，有助于数据的一致性维护，能够降低不同表之间的数据耦合，保证独立增长。但过度规范化可能导致查询性能下降，因为需要频繁地进行表链接操作，也会增加数据库设计的复杂性。 第一范式 1 NF 每个表的每一列都是不可再分的原子数据项，即表中的每个字段都不可分解。它要求每个字段的值必须单一，不能包含一组值。 12ID | NAME
+          范式是指数据表设计的规范，在范式规范下，数据库中每个表存储的重复数据能降到最少，有助于数据的一致性维护，能够降低不同表之间的数据耦合，保证独立增长。但过度规范化可能导致查询性能下降，因为需要频繁地进行表链接操作，也会增加数据库设计的复杂性。第一范式 1 NF每个表的每一列都是不可再分的原子数据项，即表中的每个字段都不可分解。它要求每个字段的值必须单一，不能包含一组值。 12ID | NAME |
         </div>
       </a>
 
@@ -466,7 +466,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-05-20/b281d4a0b45e/" target="_self">
         <div>
-          distinct 可以使用distinct关键字指定某个或某些列唯一返回，选出唯一的结果： 123select distinct column, another_column, ...	from mytable	where condition(s); distinct会直接删除重复的行，之后的GROUP BY语句也会返回唯一的行，但可以对相同属性值的行做一些统计计算，例如求和等。 结果排序 ord
+          distinct可以使用distinct关键字指定某个或某些列唯一返回，选出唯一的结果： 123select distinct column, another_column, ...	from mytable	where condition(s); distinct会直接删除重复的行，之后的GROUP BY语句也会返回唯一的行，但可以对相同属性值的行做一些统计计算，例如求和等。结果排序order
         </div>
       </a>
 
@@ -499,7 +499,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-05-20/bedaade6a103/" target="_self">
         <div>
-          使用select查询的where子句可用来描述哪些行应当进入结果，通过condition限定条件筛选行数据： 12345select column, another_column, ...from mytable	where condition		and/or another_condition		and/or ...; 可通过AND或OR两个关键字组装多个条件。存在一些筛选整数/浮点数的语法规则
+          使用select查询的where子句可用来描述哪些行应当进入结果，通过condition限定条件筛选行数据： 12345select column, another_column, ...from mytable	where condition		and/or another_condition		and/or ...; 可通过AND或OR两个关键字组装多个条件。存在一些筛选整数&#x2F;浮点数
         </div>
       </a>
 
@@ -532,7 +532,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-05-20/00fb233d6433/" target="_self">
         <div>
-          用于查询数据库中信息的查询语句。一条select语句允许我们指定从什么表取数据，取哪些数据，返回前对数据作何计算处理。 最常见的查询就是取出表中所有数据的某几列： 1select column, another_column, ... from mytable; 查询结果是一个二维表格。像取出所有列的数据时，可以使用*代表所有列： 1select * from mytable; 相关笔记 [[SQ
+          用于查询数据库中信息的查询语句。一条select语句允许我们指定从什么表取数据，取哪些数据，返回前对数据作何计算处理。最常见的查询就是取出表中所有数据的某几列： 1select column, another_column, ... from mytable; 查询结果是一个二维表格。像取出所有列的数据时，可以使用*代表所有列： 1select * from mytable; 相关笔记[[SQL
         </div>
       </a>
 

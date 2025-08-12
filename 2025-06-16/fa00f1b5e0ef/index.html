@@ -19,15 +19,15 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本项目照抄自[MYDB](一起写个数据库 —— 0. 项目结构和一些不得不说的话 - MYDB - 项目 - 计算机 | ziyang balabala~ &#x3D; 菜狗の日常).整体分为后端和前端，之间通过socket进行交互。 前端即客户端职责单一，读取用户输入并发送倒后端执行，输出返回结果后等待下一次输入。后端需要解析SQL语句，识别合法语句后就尝试执行并返回结果。 不包括SQL语句解析器，MYD">
+    <meta name="description" content="本项目照抄自[MYDB](一起写个数据库 —— 0. 项目结构和一些不得不说的话 - MYDB - 项目 - 计算机 | ziyang balabala~ &#x3D; 菜狗の日常).整体分为后端和前端，之间通过socket进行交互。前端即客户端职责单一，读取用户输入并发送倒后端执行，输出返回结果后等待下一次输入。后端需要解析SQL语句，识别合法语句后就尝试执行并返回结果。不包括SQL语句解析器，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="项目结构">
 <meta property="og:url" content="http://example.com/2025-06-16/fa00f1b5e0ef/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="本项目照抄自[MYDB](一起写个数据库 —— 0. 项目结构和一些不得不说的话 - MYDB - 项目 - 计算机 | ziyang balabala~ &#x3D; 菜狗の日常).整体分为后端和前端，之间通过socket进行交互。 前端即客户端职责单一，读取用户输入并发送倒后端执行，输出返回结果后等待下一次输入。后端需要解析SQL语句，识别合法语句后就尝试执行并返回结果。 不包括SQL语句解析器，MYD">
+<meta property="og:description" content="本项目照抄自[MYDB](一起写个数据库 —— 0. 项目结构和一些不得不说的话 - MYDB - 项目 - 计算机 | ziyang balabala~ &#x3D; 菜狗の日常).整体分为后端和前端，之间通过socket进行交互。前端即客户端职责单一，读取用户输入并发送倒后端执行，输出返回结果后等待下一次输入。后端需要解析SQL语句，识别合法语句后就尝试执行并返回结果。不包括SQL语句解析器，">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-06-16T07:37:47.000Z">
-<meta property="article:modified_time" content="2025-08-12T01:08:50.000Z">
+<meta property="article:modified_time" content="2025-08-12T01:12:58.000Z">
 <meta property="article:author" content="OrangeFruitTea">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -275,13 +275,10 @@
             
               <div class="markdown-body">
                 
-                <p>本项目照抄自[MYDB](<a target="_blank" rel="noopener" href="https://cn-guoziyang.github.io/article/mydb0.html">一起写个数据库 —— 0. 项目结构和一些不得不说的话 - MYDB - 项目 - 计算机 | ziyang balabala~ = 菜狗の日常</a>).整体分为<a href="%E5%8F%8C%E7%AB%AF%E5%AE%9E%E7%8E%B0%E5%8F%8A%E9%80%9A%E4%BF%A1%E8%A7%84%E5%88%99">后端和前端</a>，之间通过<code>socket</code>进行交互。<br>
-前端即客户端职责单一，读取用户输入并发送倒后端执行，输出返回结果后等待下一次输入。后端需要解析SQL语句，识别合法语句后就尝试执行并返回结果。<br>
-不包括SQL语句解析器，MYDB后端分为五个模块，每个模块之间通过接口向其依赖的模块提供方法：</p>
+                <p>本项目照抄自[MYDB](<a target="_blank" rel="noopener" href="https://cn-guoziyang.github.io/article/mydb0.html">一起写个数据库 —— 0. 项目结构和一些不得不说的话 - MYDB - 项目 - 计算机 | ziyang balabala~ &#x3D; 菜狗の日常</a>).整体分为<a href="%E5%8F%8C%E7%AB%AF%E5%AE%9E%E7%8E%B0%E5%8F%8A%E9%80%9A%E4%BF%A1%E8%A7%84%E5%88%99">后端和前端</a>，之间通过<code>socket</code>进行交互。<br>前端即客户端职责单一，读取用户输入并发送倒后端执行，输出返回结果后等待下一次输入。后端需要解析SQL语句，识别合法语句后就尝试执行并返回结果。<br>不包括SQL语句解析器，MYDB后端分为五个模块，每个模块之间通过接口向其依赖的模块提供方法：</p>
 <ul>
 <li>[[事务管理]](Transaction Manager, TM）：通过维护<code>.xid</code>文件来维护事务状态，并提供接口供其他模块来查询某个事务的状态。</li>
-<li>[[数据管理]](Data Manager, DM)：直接管理数据库<code>.db</code>文件和<code>.log</code>日志文件，主要有以下职责：
-<ol>
+<li>[[数据管理]](Data Manager, DM)：直接管理数据库<code>.db</code>文件和<code>.log</code>日志文件，主要有以下职责：<ol>
 <li>分数据页管理DB文件并进行缓存</li>
 <li>管理日志文件，保证出错时可根据日志进行恢复</li>
 <li>抽象DB文件为<code>DataItem</code>类供上层模块使用，并提供缓存</li>
@@ -291,43 +288,35 @@
 <li>[[索引管理]](Index Manager, IM)：实现基于B+树的索引。<code>where</code>子句仅支持已索引字段。</li>
 <li>[[字段和表管理]](Table Manager, TBM)：实现对字段和表的管理，同时解析SQL语句，根据语句内容对表进行操作。</li>
 </ul>
-<h3 id="先总结一下各个模块提供的操作">先总结一下各个模块提供的操作,</h3>
-<ul>
-<li>DM: <code>insert(x), update(x), read(x)</code><br>
-DM提供了针对数据项(DataItem)的基本插入, 更新, 读取操作, 且这些操作是原子性的. DM会直接对数据库文件进行读写.</li>
-<li>TM: <code>begin, commit(T), abort(T), isActive(T),isCommitted(T),isAborted(T)</code><br>
-TM提供了针对事务的开始, 提交, 回滚操作, 同时提供了对数据项状态的查询操作.</li>
-<li>VM: <code>insert(X), update(X), read(X), delete(X)</code><br>
-VM提供了针对记录(entry)的增删查改操作, VM在内部为每条记录维护多个版本, 并根据不同的事务, 返回不同的版本. VM对这些实现, 是建立在DM和TM的各个操作上的，还有一个事务可见性类Visibility。</li>
-<li>TBM: <code>execute(statement)</code><br>
-TBM就是非常高层的模块了, 他能直接执行用户输入的语句(statement), 然后进行执行. TBM对语句的执行是建立在VM和IM提供的各个操作上的.</li>
-<li>IM: <code>value search(key), insert(key, value)</code><br>
-IM提供了对索引的基本操作.</li>
+<h3 id="先总结一下各个模块提供的操作"><a href="#先总结一下各个模块提供的操作" class="headerlink" title="先总结一下各个模块提供的操作,"></a>先总结一下各个模块提供的操作,</h3><ul>
+<li>DM: <code>insert(x), update(x), read(x)</code><br>  DM提供了针对数据项(DataItem)的基本插入, 更新, 读取操作, 且这些操作是原子性的. DM会直接对数据库文件进行读写.</li>
+<li>TM: <code>begin, commit(T), abort(T), isActive(T),isCommitted(T),isAborted(T)</code><br>  TM提供了针对事务的开始, 提交, 回滚操作, 同时提供了对数据项状态的查询操作.</li>
+<li>VM: <code>insert(X), update(X), read(X), delete(X)</code><br>  VM提供了针对记录(entry)的增删查改操作, VM在内部为每条记录维护多个版本, 并根据不同的事务, 返回不同的版本. VM对这些实现, 是建立在DM和TM的各个操作上的，还有一个事务可见性类Visibility。</li>
+<li>TBM: <code>execute(statement)</code><br>  TBM就是非常高层的模块了, 他能直接执行用户输入的语句(statement), 然后进行执行. TBM对语句的执行是建立在VM和IM提供的各个操作上的.</li>
+<li>IM: <code>value search(key), insert(key, value)</code><br>  IM提供了对索引的基本操作.</li>
 </ul>
-<h3 id="read语句的流程">read语句的流程</h3>
-<p>假设现在要执行<code>read * from student where id = 2012141461290</code>, 并且在id上已经建有索引. 执行过程如下:</p>
+<h3 id="read语句的流程"><a href="#read语句的流程" class="headerlink" title="read语句的流程"></a>read语句的流程</h3><p>假设现在要执行<code>read * from student where id = 2012141461290</code>, 并且在id上已经建有索引. 执行过程如下:</p>
 <ol>
-<li>TBM接受语句, 并进行解析.</li>
-<li>TBM调用IM的<code>search</code>方法, 查找对应记录所在的地址.</li>
-<li>TBM调用VM的<code>read</code>方法, 并将地址作为参数, 从VM中尝试读取记录内容.</li>
-<li>VM通过DM的<code>read</code>操作, 读取该条记录的最新版本.</li>
-<li>VM检测该版本是否对该事务可见, 其中需要<code>Visibility.isVisible()</code>方法.</li>
-<li>如果可见, 则返回该版本的数据.</li>
-<li>如果不可见, 则读取上一个版本, 并重复5, 6, 7.</li>
-<li>TBM取得记录的二进制内容后, 对其进行解析, 还原出记录内容.</li>
+<li>TBM接受语句, 并进行解析.  </li>
+<li>TBM调用IM的<code>search</code>方法, 查找对应记录所在的地址.  </li>
+<li>TBM调用VM的<code>read</code>方法, 并将地址作为参数, 从VM中尝试读取记录内容.  </li>
+<li>VM通过DM的<code>read</code>操作, 读取该条记录的最新版本.  </li>
+<li>VM检测该版本是否对该事务可见, 其中需要<code>Visibility.isVisible()</code>方法.  </li>
+<li>如果可见, 则返回该版本的数据.  </li>
+<li>如果不可见, 则读取上一个版本, 并重复5, 6, 7.  </li>
+<li>TBM取得记录的二进制内容后, 对其进行解析, 还原出记录内容.  </li>
 <li>TBM将记录的内容返回给客户端.</li>
 </ol>
-<h3 id="insert语句的流程">insert语句的流程</h3>
-<p>假设现在要执行<code>insert into student values “zhangyuanjia” 2012141461290</code>这条语句. 执行过程如下:</p>
+<h3 id="insert语句的流程"><a href="#insert语句的流程" class="headerlink" title="insert语句的流程"></a>insert语句的流程</h3><p>假设现在要执行<code>insert into student values “zhangyuanjia” 2012141461290</code>这条语句. 执行过程如下:</p>
 <ol>
-<li>TBM接受语句, 并进行解析.</li>
-<li>TBM将<code>values</code>的值, 二进制化.</li>
-<li>TBM利用VM的<code>insert</code>操作, 将二进制化后的数据, 插入到数据库.</li>
-<li>VM为该条数据建立版本控制, 并利用DM的<code>insert</code>操作, 将数据插入到数据库.</li>
-<li>DM将数据插入到数据库, 并返回其被存储的地址.</li>
-<li>VM将得到的地址, 作为该条记录的handler, 返回给TBM.</li>
-<li>TBM计算该条语句的key, 并将handler作为data, 并调用IM的insert, 建立索引.</li>
-<li>IM利用DM提供的<code>read</code>和<code>insert</code>等操作, 将key和data存入索引中.</li>
+<li>TBM接受语句, 并进行解析.  </li>
+<li>TBM将<code>values</code>的值, 二进制化.  </li>
+<li>TBM利用VM的<code>insert</code>操作, 将二进制化后的数据, 插入到数据库.  </li>
+<li>VM为该条数据建立版本控制, 并利用DM的<code>insert</code>操作, 将数据插入到数据库.  </li>
+<li>DM将数据插入到数据库, 并返回其被存储的地址.  </li>
+<li>VM将得到的地址, 作为该条记录的handler, 返回给TBM.  </li>
+<li>TBM计算该条语句的key, 并将handler作为data, 并调用IM的insert, 建立索引.  </li>
+<li>IM利用DM提供的<code>read</code>和<code>insert</code>等操作, 将key和data存入索引中.  </li>
 <li>TBM返回客户端插入成功的信息.</li>
 </ol>
 
@@ -348,12 +337,12 @@ IM提供了对索引的基本操作.</li>
     
       <span class="category-chain">
         
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
   
   
 

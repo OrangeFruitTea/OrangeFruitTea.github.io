@@ -19,12 +19,12 @@
   <meta name="author" content="OrangeFruitTea">
   <meta name="keywords" content="">
   
-    <meta name="description" content="【C++11】右值引用解析 参考并翻译自 Thoma’s Becker’s overview（2013）。 介绍 右值与右值引用是在 c++11 中新增的特性。在首次了解右值引用时很难看出设计这一特性的目的、解决了什么问题等，因此下文通过罗列编程中产生的（推动 C++ 设计右值引用的）问题，了解右值引用是怎么解决它们的。 右值引用解决了至少两个问题：  移动语义 完美转发  首先是移动语义。在描述">
+    <meta name="description" content="【C++11】右值引用解析参考并翻译自 Thoma’s Becker’s overview（2013）。 介绍右值与右值引用是在 c++11 中新增的特性。在首次了解右值引用时很难看出设计这一特性的目的、解决了什么问题等，因此下文通过罗列编程中产生的（推动 C++ 设计右值引用的）问题，了解右值引用是怎么解决它们的。 右值引用解决了至少两个问题：  移动语义 完美转发  首先是移动语义。在描述这一">
 <meta property="og:type" content="article">
 <meta property="og:title" content="右值引用浅析">
 <meta property="og:url" content="http://example.com/2024-10-10/b27fcb36e098/index.html">
 <meta property="og:site_name" content="果茶小站">
-<meta property="og:description" content="【C++11】右值引用解析 参考并翻译自 Thoma’s Becker’s overview（2013）。 介绍 右值与右值引用是在 c++11 中新增的特性。在首次了解右值引用时很难看出设计这一特性的目的、解决了什么问题等，因此下文通过罗列编程中产生的（推动 C++ 设计右值引用的）问题，了解右值引用是怎么解决它们的。 右值引用解决了至少两个问题：  移动语义 完美转发  首先是移动语义。在描述">
+<meta property="og:description" content="【C++11】右值引用解析参考并翻译自 Thoma’s Becker’s overview（2013）。 介绍右值与右值引用是在 c++11 中新增的特性。在首次了解右值引用时很难看出设计这一特性的目的、解决了什么问题等，因此下文通过罗列编程中产生的（推动 C++ 设计右值引用的）问题，了解右值引用是怎么解决它们的。 右值引用解决了至少两个问题：  移动语义 完美转发  首先是移动语义。在描述这一">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-10-10T08:25:05.000Z">
 <meta property="article:modified_time" content="2024-11-09T13:09:20.000Z">
@@ -275,10 +275,8 @@
             
               <div class="markdown-body">
                 
-                <h1>【C++11】右值引用解析</h1>
-<p>参考并翻译自 <a target="_blank" rel="noopener" href="http://thbecker.net/articles/rvalue_references/section_01.html">Thoma’s Becker’s overview</a>（2013）。</p>
-<h1>介绍</h1>
-<p>右值与右值引用是在 c++11 中新增的特性。在首次了解右值引用时很难看出设计这一特性的目的、解决了什么问题等，因此下文通过罗列编程中产生的（推动 C++ 设计右值引用的）问题，了解右值引用是怎么解决它们的。</p>
+                <h1 id="【C-11】右值引用解析"><a href="#【C-11】右值引用解析" class="headerlink" title="【C++11】右值引用解析"></a>【C++11】右值引用解析</h1><p>参考并翻译自 <a target="_blank" rel="noopener" href="http://thbecker.net/articles/rvalue_references/section_01.html">Thoma’s Becker’s overview</a>（2013）。</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>右值与右值引用是在 c++11 中新增的特性。在首次了解右值引用时很难看出设计这一特性的目的、解决了什么问题等，因此下文通过罗列编程中产生的（推动 C++ 设计右值引用的）问题，了解右值引用是怎么解决它们的。</p>
 <p>右值引用解决了至少两个问题：</p>
 <ul>
 <li>移动语义</li>
@@ -287,15 +285,18 @@
 <p>首先是移动语义。在描述这一问题前，需要先了解 C++ 中的左值与右值。</p>
 <p>C 语言中对左值右值一开始的定义是：左值指能出现在赋值运算符左侧或右侧的表达式，右值则是只能出现在赋值运算符的右侧的表达式。例如：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> a = <span class="hljs-number">42</span>；<br><span class="hljs-type">int</span> b = <span class="hljs-number">43</span>; <span class="hljs-comment">// a与b都是左值表达式</span><br>a = b;      <span class="hljs-comment">// ok</span><br>b = a;      <span class="hljs-comment">// ok</span><br>a = a * b;  <span class="hljs-comment">// ok</span><br><span class="hljs-comment">// a * b是右值表达式</span><br><span class="hljs-type">int</span> c = a * b; <span class="hljs-comment">// ok</span><br>a * b = <span class="hljs-number">42</span>;    <span class="hljs-comment">// error，右值表达式不能位于赋值运算符左侧</span><br></code></pre></td></tr></table></figure>
+
 <p>C++ 在一开始时也同样沿用了这一定义，但在 C++ 中使用用户自定义类型并对其进行修改和赋值时，可能会出现一些微妙地不符合该定义的情况。</p>
 <p>下述是一个可选的对左值右值的定义；这个定义依旧有不准确之处，但足够帮助你理解 C++ 的右值引用：</p>
 <p>C++ 中，所有表达式不是左值表达式就是右值表达式；当一个表达式是左值表达式时，它对应着内存中的某个地址，并且允许我们通过&amp;操作符获得它的地址；而不是左值表达式的表达式都是右值表达式：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> i = <span class="hljs-number">42</span>;<br>i = <span class="hljs-number">43</span>;             <span class="hljs-comment">// i为左值表达式</span><br><span class="hljs-type">int</span>* p = &amp;i;        <span class="hljs-comment">// ok, i为左值表达式，可取地址</span><br><span class="hljs-function"><span class="hljs-type">int</span>&amp; <span class="hljs-title">foo</span><span class="hljs-params">()</span></span>;<br><span class="hljs-built_in">foo</span>() = <span class="hljs-number">42</span>;         <span class="hljs-comment">// ok, foo() 也为左值表达式</span><br><span class="hljs-type">int</span>* p1 = &amp;<span class="hljs-built_in">foo</span>();   <span class="hljs-comment">// ok, 能够对foo()取地址</span><br></code></pre></td></tr></table></figure>
+
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">foobar</span><span class="hljs-params">()</span></span>;<br><span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;<br>j = <span class="hljs-built_in">foobar</span>();       <span class="hljs-comment">// ok, foobar()为右值表达式</span><br><span class="hljs-type">int</span>* p2 = &amp;<span class="hljs-built_in">foobar</span>();<span class="hljs-comment">// error, 不能对右值表达式取地址</span><br>j = <span class="hljs-number">42</span>;             <span class="hljs-comment">// ok, 42是一个右值表达式</span><br></code></pre></td></tr></table></figure>
-<h1>移动语义</h1>
-<p>假设 X 是一个类，它持有指向某种资源的指针或句柄，比如 m_pResource（这里的资源指任何需要花费大量努力去构造、克隆或销毁的东西）；一个很好的例子是 std::vector，它持有一系列对象，这些对象存在于分配的内存数组中。</p>
+
+<h1 id="移动语义"><a href="#移动语义" class="headerlink" title="移动语义"></a>移动语义</h1><p>假设 X 是一个类，它持有指向某种资源的指针或句柄，比如 m_pResource（这里的资源指任何需要花费大量努力去构造、克隆或销毁的东西）；一个很好的例子是 std::vector，它持有一系列对象，这些对象存在于分配的内存数组中。</p>
 <p>与拷贝构造函数类似，假设 X 在代码中被这样使用：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">X <span class="hljs-title">foo</span><span class="hljs-params">()</span></span>;<br>X x;<br><span class="hljs-comment">// 对x的部分操作和使用</span><br>x = <span class="hljs-built_in">foo</span>();<br></code></pre></td></tr></table></figure>
+
 <p>对于最后一行代码，程序执行如下操作：</p>
 <ul>
 <li>克隆由 foo 返回的临时变量及其资源；</li>
@@ -304,22 +305,26 @@
 </ul>
 <p>可以得到一般的拷贝运算符的执行方式：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp">X&amp; X::<span class="hljs-keyword">operator</span>=(X <span class="hljs-type">const</span>&amp; rhs) &#123;<br>  <span class="hljs-comment">// [...]</span><br>  <span class="hljs-comment">// 对rhs.m_pResource指向的资源创建一次拷贝</span><br>  <span class="hljs-comment">// Destruct the resource that m_pResource refers to. </span><br>  <span class="hljs-comment">// Attach the clone to m_pResource.</span><br>  <span class="hljs-comment">// [...]</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
 <p>对于上述步骤，程序出现了一次拷贝：对 foo()的返回值拷贝了一次临时变量，而后又将这一临时变量销毁。显然，存在一个更有效率的执行方式：交换 x 与 foo 返回的临时变量之间的资源指针，然后让临时变量的析构函数销毁 x 的原始资源。换句话说，当赋值运算符右侧是右值时，我们希望拷贝赋值运算符应该这么执行：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// [...]</span><br>  <span class="hljs-comment">// 交换 m-pResource 与 rhs.m_pResource</span><br>  <span class="hljs-comment">// [...]</span><br></code></pre></td></tr></table></figure>
+
 <p>这就是 C++11 引入的_移动语义_。在 C++11 中，使用以下重载可以重载到移动语义：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp">X&amp; X::<span class="hljs-keyword">operator</span>=(&lt;待定类型&gt; rhs) &#123;<br>  <span class="hljs-comment">// [...]</span><br>  <span class="hljs-comment">// 交换 m-pResource 与 rhs.m_pResource</span><br>  <span class="hljs-comment">// [...]</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
 <p>由于我们在重载一个拷贝赋值运算符，因此这个“待定类型”必须是引用类型：我们希望 rhs 参数是按引用传递的；同时，我们希望这个“待定类型”能做到这个操作：</p>
 <ul>
 <li>使用左值表达式作为参数时，程序会调用正常版的拷贝（使用 const type &amp;类型）；使用右值表达式作为参数时，程序调用移动语义重载后的拷贝（使用待定类型）。</li>
 </ul>
 <p>而显然，右值引用就是这个所谓的待定类型。</p>
-<h1>右值引用</h1>
-<p>对于一个类型 X，C++ 中使用 X&amp;&amp;来表示 X 的右值引用，而先前的 X&amp;则被称为左值引用。</p>
+<h1 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h1><p>对于一个类型 X，C++ 中使用 X&amp;&amp;来表示 X 的右值引用，而先前的 X&amp;则被称为左值引用。</p>
 <p>右值引用与左值引用之间存在很多相似，而二者最明显的不同是，在函数重载的状况下，输入左值参数会优先匹配左值引用的函数重载，输入右值参数则会优先匹配右值引用的函数重载。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(X&amp; x)</span></span>;    <span class="hljs-comment">// 左值引用重载</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(X&amp;&amp; x)</span></span>;   <span class="hljs-comment">// 右值引用重载</span><br><br>X x;<br><span class="hljs-function">X <span class="hljs-title">foobar</span><span class="hljs-params">()</span></span>;<br><br><span class="hljs-built_in">foo</span>(x);            <span class="hljs-comment">// 参数为左值，因此调用foo(X&amp; x)</span><br><span class="hljs-built_in">foo</span>(<span class="hljs-built_in">foobar</span>());     <span class="hljs-comment">// 参数为右值，因此调用foo(X&amp;&amp; x)</span><br></code></pre></td></tr></table></figure>
+
 <p>因此右值引用的大致功能是：它让函数能够在编译期通过重载，区分出传入参数是左值还是右值。</p>
 <p>任何函数都可以通过重载一个右值引用参数获得这个能力，但在大部分状况下，这种重载应当只出现在拷贝构造函数和拷贝赋值运算符中，并在重载内部实现语义的移动。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp">X&amp; X::<span class="hljs-keyword">operator</span>=(X <span class="hljs-type">const</span>&amp; rhs);    <span class="hljs-comment">// 默认的拷贝赋值运算符重载</span><br>X&amp; X::<span class="hljs-keyword">operator</span>=(X&amp;&amp; rhs) &#123;        <span class="hljs-comment">// 使用右值引用参数重载</span><br>    <span class="hljs-comment">// 实现移动语义：将rhs与this交换</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
 <p><em>上述的移动语义实际上仍可改进，这会在强制移动语义上提到。</em></p>
 <p>详细信息：</p>
 <ul>
@@ -327,16 +332,17 @@
 <li>对于函数 foo(const X&amp;)：该函数允许传入左值参数和右值参数，但函数内部无法对参数的值类型进行区分；</li>
 <li>对于函数 foo(X&amp;&amp;)：C++11 中，该函数允许传入右值参数，而不允许传入左值参数。</li>
 </ul>
-<h1>强制移动语义</h1>
-<p>C++ 标准第一修正案规定：“委员会不得制定任何阻止 C++ 程序员自我陷害的规则。”换言之，C++ 会倾向给予程序员更多的控制权，而非从他们的粗心操作中保护他们。</p>
+<h1 id="强制移动语义"><a href="#强制移动语义" class="headerlink" title="强制移动语义"></a>强制移动语义</h1><p>C++ 标准第一修正案规定：“委员会不得制定任何阻止 C++ 程序员自我陷害的规则。”换言之，C++ 会倾向给予程序员更多的控制权，而非从他们的粗心操作中保护他们。</p>
 <p>遵循这一精神，C++11 允许程序员既可以在右值上使用移动语义，也可以根据判断在左值上使用。</p>
 <p>一个很好的例子是 C++std 库函数 swap()。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(T&amp; a, T&amp; b)</span> </span>&#123;<br>    <span class="hljs-function">T <span class="hljs-title">tmp</span><span class="hljs-params">(a)</span></span>;<br>    a = b;<br>    b = tmp;<br>&#125;<br><br>X a, b;<br><span class="hljs-built_in">swap</span>(a, b);<br></code></pre></td></tr></table></figure>
+
 <p>这一个 swap 函数中，三行赋值和构造函数都没有使用移动语义，但显然这里可以使用移动语义：当一个变量作为拷贝构造或拷贝赋值的源时，那个变量要么不再被使用，要么只被用作赋值的目标。</p>
 <p>在 C++11 中，std 库函数中新增了 move()函数，该函数将输入的参数转换为一个右值，除此之外不做任何事情。因此在 C++11 中，库函数 swap 会类似这样：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(T&amp; a, T&amp; b)</span> </span>&#123;<br>    <span class="hljs-function">T <span class="hljs-title">tmp</span><span class="hljs-params">(std::move(a))</span></span>;<br>    a = std::<span class="hljs-built_in">move</span>(b);<br>    b = std::<span class="hljs-built_in">move</span>(tmp);<br>&#125;<br></code></pre></td></tr></table></figure>
+
 <p>现在的 swap 函数中都使用了移动语义。</p>
-<p><em>对于不实现移动语义的类型（即没有使用右值引用重载其拷贝构造函数/赋值运算符），新 swap 函数的行为与旧的一样。</em></p>
+<p><em>对于不实现移动语义的类型（即没有使用右值引用重载其拷贝构造函数&#x2F;赋值运算符），新 swap 函数的行为与旧的一样。</em></p>
 <p>像上述一样使用 std::move 改写函数可以带来这些好处：</p>
 <ul>
 <li>对于实现了移动语义的类型，很多标准算法和操作都将使用移动语义，以获得显著的性能提升：比如就地的交换排序，使用移动语义能大大减少创建临时变量的开销。</li>
@@ -344,32 +350,39 @@
 </ul>
 <p>在我们了解 std::move()函数后，我们发现先前提到的“使用右值引用重载拷贝复制运算符”这一实现仍有一部分问题。考虑一个两端都是变量的赋值运算符：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">a = b;<br></code></pre></td></tr></table></figure>
-<p>你认为这个“=”在用什么方式运行？你期待程序以这样的方式执行：a 对应的对象会被 b 的一个拷贝所覆盖，而在这一覆盖过程中，你还期待 a 覆盖前对应的对象执行其析构流程。</p>
+
+<p>你认为这个“&#x3D;”在用什么方式运行？你期待程序以这样的方式执行：a 对应的对象会被 b 的一个拷贝所覆盖，而在这一覆盖过程中，你还期待 a 覆盖前对应的对象执行其析构流程。</p>
 <p>现在考虑这样的语句：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">a = std::<span class="hljs-built_in">move</span>(b);<br></code></pre></td></tr></table></figure>
+
 <p>如果这一移动语义的实现与简单的交换类似，那么语句仅会将 a 与 b 对应的对象进行呼唤，没有任何对象会执行其析构流程。</p>
 <p>换言之，我们并不知道被先前被 a 持有的对象会在什么时候析构：一个变量已经被赋值了，但该变量赋值前拥有的对象依旧在内存的某个未知的位置存放着。对象的析构函数会存在一部分副作用，因此在右值引用重载的拷贝赋值运算符中，如果一个对象的析构函数存在额外作用，都需要对其进行显式调用：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp">X&amp; X::<span class="hljs-keyword">operator</span>=(X&amp;&amp; rhs) &#123;<br>    <span class="hljs-comment">// 实现对象的析构函数中的那些额外功能，保证使得对象能够被正常赋值和析构</span><br>    <span class="hljs-comment">// 实现移动语义</span><br>    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h1>右值引用和右值</h1>
-<p>与先前一样，考虑类 X 使用移动语义重载了其拷贝构造函数和拷贝赋值运算符，对于以下代码：</p>
+
+<h1 id="右值引用和右值"><a href="#右值引用和右值" class="headerlink" title="右值引用和右值"></a>右值引用和右值</h1><p>与先前一样，考虑类 X 使用移动语义重载了其拷贝构造函数和拷贝赋值运算符，对于以下代码：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(X&amp;&amp; x)</span> </span>&#123;<br>    X anotherX = x;<br>    <span class="hljs-comment">// ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
 <p>这里出现了一个有趣的问题：在函数体 foo 中，X 的拷贝构造函数的哪个重载会被调用？这一代码中，x 是一个对 X 类型变量的右值引用，即 x 更有可能是一个右值的别名，因此，我们自然而然期待着 x 自己被赋值时也会与右值绑定，也就是期待其调用 X(X&amp;&amp; rhs)（经过右值引用重载的拷贝构造函数）。</p>
 <p>换言之，我们期待一个右值引用本身也是一个右值。但右值引用的设计者采用了另一种更加微妙的解决方案：</p>
 <p><em>被声明为右值引用的东西既可以是左值也可以是右值，区分其左值右值的方式是：如果它拥有一个名字，那么它是左值；反之则是右值。</em></p>
 <p>对于上述的示例代码，函数体 foo 中的右值引用参数拥有一个名字 x，因此它是一个左值。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(X&amp;&amp; x)</span> </span>&#123;<br>    X anotherX = x; <span class="hljs-comment">// 调用拷贝构造函数 X(X const&amp; rhs)</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
 <p>下述示例则是使用了没有名字的右值引用，因此其为右值：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">X&amp;&amp; <span class="hljs-title">goo</span><span class="hljs-params">()</span></span>;<br>X x = <span class="hljs-built_in">goo</span>();        <span class="hljs-comment">// 调用 X(X&amp;&amp;rhs)，因为赋值右侧的值没有名字</span><br></code></pre></td></tr></table></figure>
+
 <p>这样设计的理由是：允许移动语义默认上能对有名字的变量使用，例如：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">X anotherX = x;    <span class="hljs-comment">// x仍在使用域中！</span><br></code></pre></td></tr></table></figure>
+
 <p>移动语义最重要的一点是：只在其“不重要”时才会使用。这里有一条原则：“如果一个变量有名字，那么它是一个左值表达式”。</p>
 <p>这个原则是否有另一部分：“如果一个变量没有名字，那么它是一个右值表达式”？</p>
 <p>因此语句 std:move(x)会被视为一个右值引用，且并不拥有一个名字。因此它是一个右值。所以，std:move 的作用实际上是“将其接收的参数转为一个右值”，而它是通过“隐藏它的名字”来实现的。</p>
 <p>下述示例用来展示“名字-左值关联”原则有多么重要。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">Parent</span>(Parent <span class="hljs-type">const</span>&amp; rhs);<br><span class="hljs-built_in">Parent</span>(Parent&amp;&amp; rhs);<br><br><span class="hljs-built_in">Child</span>(Child <span class="hljs-type">const</span> &amp; rhs) : <span class="hljs-built_in">Parent</span>(rhs) &#123;<br>    <span class="hljs-comment">// ...</span><br>&#125;<br><br><span class="hljs-built_in">Child</span>(Child&amp;&amp; rhs) : <span class="hljs-built_in">Parent</span>(rhs) &#123; <span class="hljs-comment">// wrong, rhs是一个左值</span><br>    <span class="hljs-comment">// ...</span><br>&#125;<br><br>Child（Child&amp;&amp; rhs) : <span class="hljs-built_in">Parent</span>(std::<span class="hljs-built_in">move</span>(rhs)) &#123; <span class="hljs-comment">//good, 这样才会调用基类的右值引用重载版本</span><br>    <span class="hljs-comment">// ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<h1>移动语义与编译器优化</h1>
-<p>考虑下述的函数定义：</p>
+
+<h1 id="移动语义与编译器优化"><a href="#移动语义与编译器优化" class="headerlink" title="移动语义与编译器优化"></a>移动语义与编译器优化</h1><p>考虑下述的函数定义：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">X <span class="hljs-title">foo</span><span class="hljs-params">()</span> </span>&#123;<br>    X x;<br>    <span class="hljs-comment">// 可能对x进行一些操作</span><br>    <span class="hljs-keyword">return</span> x;<br>&#125;<br></code></pre></td></tr></table></figure>
+
 <p>X 是一个用户自定义类，并且我们使用了移动语义，将其拷贝构造函数和拷贝赋值运算符进行了重载。从表面上看，你可能会想：“等等，return 语句执行时会产生一次拷贝，将 x 拷贝到了 foo 函数的返回值上。”</p>
 <p>为了确认这一点，我们在 return 语句上使用移动语义来代替试试：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">X <span class="hljs-title">foo</span><span class="hljs-params">()</span> </span>&#123;<br>    X x;<br>    <span class="hljs-comment">// 可能对x进行一些操作</span><br>    <span class="hljs-keyword">return</span> std:<span class="hljs-built_in">move</span>(x);    <span class="hljs-comment">// warning: 请勿使用move返回局部变量</span><br>&#125;<br></code></pre></td></tr></table></figure>

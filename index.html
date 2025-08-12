@@ -268,7 +268,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-07-29/d652fa742b62/" target="_self">
         <div>
-          核心组件 基础的分布式调用框架包含服务注册中心、服务提供者、服务消费者，支持：  服务注册与发现（服务地址的动态管理） 远程通信（基于TCP的自定义协议） 简单的负载均衡（轮询策略）  核心技术点  网络通信：使用Java NIO（非阻塞IO）实现TCP通信 序列化：自定义将Java对象转为字节流 服务注册：基于内存存储服务地址（在生产环境可用ZooKeeper/Redis） 远程调用：模拟RPC
+          核心组件基础的分布式调用框架包含服务注册中心、服务提供者、服务消费者，支持：  服务注册与发现（服务地址的动态管理） 远程通信（基于TCP的自定义协议） 简单的负载均衡（轮询策略）  核心技术点 网络通信：使用Java NIO（非阻塞IO）实现TCP通信 序列化：自定义将Java对象转为字节流 服务注册：基于内存存储服务地址（在生产环境可用ZooKeeper&#x2F;Redis） 远程调用：模拟
         </div>
       </a>
 
@@ -301,7 +301,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-07-08/6e8a6f975120/" target="_self">
         <div>
-          下面以 “用户通过浏览器发送请求到服务器” 为例，详细讲解 TCP/IP 协议发送报文的完整流程： 一、TCP/IP 协议栈的层次结构 TCP/IP 协议栈分为 4 层（或 5 层，此处以 4 层为例），发送报文时遵循 “自上而下封装” 原则，每层会添加本层的头部信息（类似 “信封”），最终形成可在网络中传输的 “帧”。 4 层结构及功能如下：    层次 核心功能 代表性协议 封装的头部信息
+          下面以 “用户通过浏览器发送请求到服务器” 为例，详细讲解 TCP&#x2F;IP 协议发送报文的完整流程： 一、TCP&#x2F;IP 协议栈的层次结构TCP&#x2F;IP 协议栈分为 4 层（或 5 层，此处以 4 层为例），发送报文时遵循 “自上而下封装” 原则，每层会添加本层的头部信息（类似 “信封”），最终形成可在网络中传输的 “帧”。4 层结构及功能如下：    层次 核心功能 代表
         </div>
       </a>
 
@@ -334,7 +334,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-07-02/f60e918d4783/" target="_self">
         <div>
-          后台管理系统 主要分为商品模块、订单模块、营销模块和权限模块。  商品模块包括：商品管理、商品分类管理、商品类型管理、品牌管理 订单模块包括：订单管理、订单设置、退货申请处理、退货原因设置 营销模块包括：秒杀活动管理、优惠券管理、品牌推荐管理、新品推荐管理、人气推荐管理、专题推荐管理、首页广告管理 权限模块包括：用户管理、菜单管理、角色管理、资源管理  数据库表前缀说明  pms_*：商品模块相关
+          后台管理系统主要分为商品模块、订单模块、营销模块和权限模块。  商品模块包括：商品管理、商品分类管理、商品类型管理、品牌管理 订单模块包括：订单管理、订单设置、退货申请处理、退货原因设置 营销模块包括：秒杀活动管理、优惠券管理、品牌推荐管理、新品推荐管理、人气推荐管理、专题推荐管理、首页广告管理 权限模块包括：用户管理、菜单管理、角色管理、资源管理  数据库表前缀说明 pms_*：商品模块相关表
         </div>
       </a>
 
@@ -367,7 +367,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-07-02/97e3a71ab2f4/" target="_self">
         <div>
-          系统架构  前端服务  后台管理系统（Vue） 前台商城系统（uni-app）   网关服务（Nginx） 后端服务（SpringBoot） 数据存储  主要业务数据存储（MySql） 缓存数据存储（Redis） 用户行为分析数据存储（MongoDB） 搜索数据存储（Elastic search）   日志收集  Kibana Elasticsearch Logstash   异步通信/消息队列（
+          系统架构 前端服务 后台管理系统（Vue） 前台商城系统（uni-app）   网关服务（Nginx） 后端服务（SpringBoot） 数据存储 主要业务数据存储（MySql） 缓存数据存储（Redis） 用户行为分析数据存储（MongoDB） 搜索数据存储（Elastic search）   日志收集 Kibana Elasticsearch Logstash   异步通信&#x2F;消息队列
         </div>
       </a>
 
@@ -400,7 +400,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-30/06469df58728/" target="_self">
         <div>
-          数据库系统中，索引是提升查询效率的核心机制。索引是数据库中依附于表的一种特殊数据结构，它基于表中的某一列或多列组合（称为索引键）构建，通过在底层对索引键的值进行有序存储，形成一个快速查找的映射（即索引键值与对应数据在表中的物理/逻辑位置），来提高查找效率。 索引不存储完整数据，只存储索引键值和数据的位置信息，占用空间远小于表本身。 索引可以简单理解为：表内的数据是一本书的正文，索引是带页码的目录。
+          数据库系统中，索引是提升查询效率的核心机制。索引是数据库中依附于表的一种特殊数据结构，它基于表中的某一列或多列组合（称为索引键）构建，通过在底层对索引键的值进行有序存储，形成一个快速查找的映射（即索引键值与对应数据在表中的物理&#x2F;逻辑位置），来提高查找效率。索引不存储完整数据，只存储索引键值和数据的位置信息，占用空间远小于表本身。索引可以简单理解为：表内的数据是一本书的正文，索引是带页码的
         </div>
       </a>
 
@@ -454,7 +454,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-20/28b7046a4d27/" target="_self">
         <div>
-          MYDB被设计为C/S结构，类似MySQL，支持启动一个服务器，被多个客户端链接，通过socket通信执行SQL语句返回结果。 C/S通信 MYDB使用一种特殊的二进制格式用于双端通信（其实可以直接用明文）。 传输的基本结构是Package： 1234public class Pakage &#123;	byte[] data;	Exception err;&#125; 每个包体在被发送前都有En
+          MYDB被设计为C&#x2F;S结构，类似MySQL，支持启动一个服务器，被多个客户端链接，通过socket通信执行SQL语句返回结果。 C&#x2F;S通信MYDB使用一种特殊的二进制格式用于双端通信（其实可以直接用明文）。传输的基本结构是Package： 1234public class Pakage &#123;	byte[] data;	Exception err;&#125; 每个包体在
         </div>
       </a>
 
@@ -478,12 +478,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
   
   
 
@@ -515,7 +515,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-20/4beb296e4b5b/" target="_self">
         <div>
-          MYDB的SQL语法 语句语法如下： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657&lt;begin statement&gt;    begin [isolation level (read committed|repeatable
+          MYDB的SQL语法语句语法如下： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657&lt;begin statement&gt;    begin [isolation level (read committed|repeatable
         </div>
       </a>
 
@@ -539,12 +539,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
   
   
 
@@ -576,7 +576,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-19/bb687791a5c8/" target="_self">
         <div>
-          读提交 如果一个记录的最新版本被加上锁，另一个事务想要修改或读取该记录时，MYDB会返回一个数据的旧版本快照。此时可以认为被加锁的最新版本对于另一个事务来说不可见。于是版本可见性的概念就出现了。 版本可见性与事务的隔离程度相关。MYDB支持的最低事务隔离程度是“读提交”，即事务在读取数据时，只能读取已经提交事务产生的数据。为了实现读提交，为每个记录（版本）维护了XMIN和XMAX两个变量。 当想要
+          读提交如果一个记录的最新版本被加上锁，另一个事务想要修改或读取该记录时，MYDB会返回一个数据的旧版本快照。此时可以认为被加锁的最新版本对于另一个事务来说不可见。于是版本可见性的概念就出现了。版本可见性与事务的隔离程度相关。MYDB支持的最低事务隔离程度是“读提交”，即事务在读取数据时，只能读取已经提交事务产生的数据。为了实现读提交，为每个记录（版本）维护了XMIN和XMAX两个变量。当想要删除一
         </div>
       </a>
 
@@ -600,12 +600,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
   
   
 
@@ -637,7 +637,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025-06-19/8c5e47f88f4a/" target="_self">
         <div>
-          冲突与2PL 首先定义数据库的冲突。在不考虑插入操作，只看更新操作（U）和读操作（R），只要满足下面三个条件，就可以说这两个操作相互冲突：  这两个操作由不同的事务执行 这两个操作的目标是同一个数据项 这两个操作至少有一个是更新操作 因此对同一个数据操作的冲突，只有两种情况： 两个不同事务的更新（U）冲突 两个不同事物的更新-读（U-R）冲突 两个事务是否相互冲突的区别是，交换两个互不冲突的操作的
+          冲突与2PL首先定义数据库的冲突。在不考虑插入操作，只看更新操作（U）和读操作（R），只要满足下面三个条件，就可以说这两个操作相互冲突：  这两个操作由不同的事务执行 这两个操作的目标是同一个数据项 这两个操作至少有一个是更新操作因此对同一个数据操作的冲突，只有两种情况： 两个不同事务的更新（U）冲突 两个不同事物的更新-读（U-R）冲突两个事务是否相互冲突的区别是，交换两个互不冲突的操作的顺序，
         </div>
       </a>
 
@@ -661,12 +661,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  <a href="/categories/%E9%A1%B9%E7%9B%AE/%E4%BB%BF%E7%AE%80%E6%98%93%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">仿简易数据库</a>
   
   
 

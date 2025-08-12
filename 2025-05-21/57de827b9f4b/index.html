@@ -277,8 +277,7 @@
                 
                 <p>将所有的查询语法集中到一次SQL执行中：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-keyword">distinct</span> <span class="hljs-keyword">column</span>, agg_func(column_or_expression), ...<br>	<span class="hljs-keyword">from</span> mytable<br>		<span class="hljs-keyword">join</span> another_table<br>			<span class="hljs-keyword">on</span> mytable.column <span class="hljs-operator">=</span> another_table.column;<br>	<span class="hljs-keyword">where</span> constraint_expression<br>	<span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> <span class="hljs-keyword">column</span><br>	<span class="hljs-keyword">having</span> constraint_expression<br>	<span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> <span class="hljs-keyword">column</span> <span class="hljs-keyword">asc</span><span class="hljs-operator">/</span><span class="hljs-keyword">desc</span>;<br>	limit num_limit <span class="hljs-keyword">offset</span> num_offset;<br></code></pre></td></tr></table></figure>
-<p>一次查询的执行总是先从数据中按条件筛选出新数据，然后对这些数据做一次计算整理，按要求返回为结果，并保证结果尽可能简单直接。<br>
-<strong>执行顺序</strong></p>
+<p>一次查询的执行总是先从数据中按条件筛选出新数据，然后对这些数据做一次计算整理，按要求返回为结果，并保证结果尽可能简单直接。<br><strong>执行顺序</strong></p>
 <ol>
 <li><code>from</code>与<code>joins</code>：用于确定一个整体的数据范围，可能会生成一个临时数据表用于下列过程。</li>
 <li><code>where</code>：在数据源中按要求进行筛选，丢弃不符合要求的数据行。所有的筛选属性只能来自<code>from</code>圈定的表。<code>as</code>别名不能在该阶段使用，因为别名可能是一个尚未执行的表达式。</li>
